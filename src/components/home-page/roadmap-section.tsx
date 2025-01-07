@@ -32,7 +32,7 @@ export default function RoadmapSection() {
 
             <div className="mb-12 flex justify-start">
               <div className="relative w-full max-w-[462px] bg-[#1a1a1a] p-5">
-                <p>Phash 1:</p>
+                <p>Phase 1:</p>
                 <h2 className="text-3xl sm:text-3xl">Data Sourcing</h2>
                 <hr className="my-3" />
                 <p className="text-xs leading-loose sm:text-sm sm:leading-8">
@@ -43,7 +43,7 @@ export default function RoadmapSection() {
 
             <div className="relative mb-12 flex justify-center">
               <div className="w-full max-w-[462px] bg-white/10 p-5">
-                <p>Phash 2:</p>
+                <p>Phase 2:</p>
                 <h2 className="text-3xl sm:text-3xl">Experiment 1.0</h2>
                 <hr className="my-3" />
                 <p className="text-xs leading-loose sm:text-sm sm:leading-8">
@@ -55,7 +55,7 @@ export default function RoadmapSection() {
 
             <div className="flex justify-end">
               <div className="w-full max-w-[462px] bg-[#1a1a1a] p-5">
-                <p>Phash 3:</p>
+                <p>Phase 3:</p>
                 <h2 className="text-3xl sm:text-3xl">Controlled Experiment 2.0</h2>
                 <hr className="my-3" />
                 <p className="text-xs leading-loose sm:text-sm sm:leading-8">

@@ -60,7 +60,7 @@ async function login(address: string, signMessage?: MessageSignerWalletAdapterPr
 }
 
 function SolanaWalletConnect() {
-  const { wallet, publicKey, signMessage, disconnect } = useWallet()
+  const { wallet, publicKey, signMessage, disconnect, disconnecting } = useWallet()
 
   useEffect(() => {
     if (!publicKey) return
@@ -80,6 +80,11 @@ function SolanaWalletConnect() {
     if (wallet.readyState === WalletReadyState.NotDetected) window.open(wallet.adapter.url, '_blank')
     if (wallet.readyState === WalletReadyState.Unsupported) window.open(wallet.adapter.url, '_blank')
   }, [wallet])
+
+  useEffect(() => {
+    if (!disconnecting) return
+    localStorage.removeItem('token')
+  }, [disconnecting])
 
   return <></>
 }

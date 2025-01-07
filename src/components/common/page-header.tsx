@@ -10,9 +10,21 @@ import { useNavigate } from 'react-router-dom'
 
 function MobileNavigation() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
+  const { publicKey, disconnect } = useWallet()
+  const navigate = useNavigate()
+  const { setVisible } = useWalletModal()
 
   const toggleMobileMenu = () => {
     setIsMenuOpen(!isMenuOpen)
+  }
+
+  const handleDisconnect = () => {
+    localStorage.removeItem('token')
+    disconnect()
+  }
+
+  async function handleLinkTwitter() {
+    navigate('/link/twitter')
   }
 
   return (
@@ -57,6 +69,33 @@ function MobileNavigation() {
                 <ChevronRight></ChevronRight>
               </a>
             </li>
+            {publicKey && (
+              <>
+                <li onClick={handleLinkTwitter}>
+                  <span className="flex justify-between py-6">
+                    <span>Link Twitter</span>
+                    <ChevronRight></ChevronRight>
+                  </span>
+                </li>
+                <li onClick={handleDisconnect}>
+                  <span className="flex justify-between py-6">
+                    <span>Disconnect</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-white/45">{shortenAddress(publicKey.toString(), 8)}</span>
+                      <ChevronRight></ChevronRight>
+                    </div>
+                  </span>
+                </li>
+              </>
+            )}
+            {!publicKey && (
+              <li onClick={() => setVisible(true)}>
+                <span className="flex justify-between py-6">
+                  <span>Connect Wallet</span>
+                  <ChevronRight></ChevronRight>
+                </span>
+              </li>
+            )}
           </ul>
         </nav>
       </div>
@@ -70,6 +109,7 @@ export default function PageHeader() {
   const navigate = useNavigate()
 
   const handleDisconnect = () => {
+    localStorage.removeItem('token')
     disconnect()
   }
 
@@ -96,7 +136,7 @@ export default function PageHeader() {
               <Dropdown className="h-full" menu={[{ label: 'Disconnect', onClick: handleDisconnect }]}>
                 <div className="flex items-center gap-2">
                   <Wallet />
-                  {shortenAddress(publicKey?.toString() || '', 8)}
+                  {shortenAddress(publicKey?.toString() || '')}
                 </div>
               </Dropdown>
             </>

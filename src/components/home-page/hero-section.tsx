@@ -37,7 +37,7 @@ export default function HeroSection() {
                 <div className="relative inline-block whitespace-nowrap rounded-sm bg-white p-[10px] text-2xl font-bold text-black sm:text-4xl">
                   "16:8-Eat Smart, Live Better"
                 </div>
-                <div className="absolute right-6 size-0 border-[24px] border-white border-b-black/0 border-r-[#00000000] sm:right-44 sm:block"></div>
+                <div className="absolute right-4 size-0 border-[24px] border-white border-b-black/0 border-r-[#00000000] sm:right-[152px] sm:block"></div>
               </div>
               <div>
                 <div className="inline-block rounded-sm bg-white p-[10px] text-sm text-black md:text-sm">
