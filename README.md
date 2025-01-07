@@ -1,13 +1,22 @@
-# Food Science Website
+# Intermittent Fasting Website
 
-A modern web application focused on food science education and research.
+Website for [ifsci.wtf](https://ifsci.wtf/)
 
-## 🚀 Features
+Our mission is to build a specialized Vertical AI Agent that powers DeSci research.
 
-- Interactive food science learning materials
-- Research database integration
-- Modern, responsive UI
-- TypeScript + Vue.js implementation
+[![GitHub contributors](https://img.shields.io/github/contributors/Eating-Wisely-Labs/ifsci-website)](https://github.com/Eating-Wisely-Labs/ifsci-website/graphs/contributors)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/w/Eating-Wisely-Labs/ifsci-website)](https://github.com/Eating-Wisely-Labs/ifsci-website/graphs/contributors)
+[![GitHub Stars](https://img.shields.io/github/stars/Eating-Wisely-Labs/ifsci-website.svg)](https://github.com/Eating-Wisely-Labs/ifsci-website/stargazers)
+![GitHub repo size](https://img.shields.io/github/repo-size/Eating-Wisely-Labs/ifsci-website)
+
+<!-- Badge row 2 - links and profiles -->
+[![Website ifsci.wtf](https://img.shields.io/website-up-down-green-red/https/ifsci.wtf.svg)](https://ifsci.wtf/)
+[![Docs](https://img.shields.io/badge/docs-up-green)](https://fasting.super.site/)
+[![Twitter Base](https://img.shields.io/twitter/follow/ifsci_ai?style=social)](https://x.com/ifsci_ai)
+
+<!-- Badge row 3 - detailed status -->
+[![GitHub pull requests by-label](https://img.shields.io/github/issues-pr-raw/Eating-Wisely-Labs/ifsci-website)](https://github.com/Eating-Wisely-Labs/ifsci-website/pulls)
+[![GitHub Issues](https://img.shields.io/github/issues-raw/Eating-Wisely-Labs/ifsci-website.svg)](https://github.com/Eating-Wisely-Labs/ifsci-website/issues)
 
 ## 📋 Prerequisites
 
@@ -57,10 +66,6 @@ This project is licensed under the Apache License, Version 2.0 - see the [LICENS
 - [Documentation](docs/)
 - [Issue Tracker](https://github.com/Eating-Wisely-Labs/ifsci-website/issues)
 - [Project Website](https://ifsci.wtf)
-
-## 👥 Code of Conduct
-
-Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing to this project.
 
 ## 📞 Contact
 
