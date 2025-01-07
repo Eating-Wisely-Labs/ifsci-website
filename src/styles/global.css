@@ -1,0 +1,17 @@
+@font-face {
+  font-family: 'Afacad';
+  font-style: normal;
+  font-weight: 100 200 300 400 500 600 700;
+  font-display: swap;
+  src: url(https://s.ifsci.wtf/static/fonts/afacad.ttf) format('truetype');
+}
+
+html, body {
+  font-family: 'Afacad';
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #000;
+}
+  
