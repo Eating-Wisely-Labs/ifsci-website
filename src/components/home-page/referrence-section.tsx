@@ -1,6 +1,6 @@
 export default function ReferrenceSection() {
   function handleFollowClick() {
-    window.open('https://x.com/adesciagent')
+    window.open('https://x.com/ifsci_ai')
   }
 
   return (

@@ -41,10 +41,10 @@ import {
 } from '@solana/wallet-adapter-wallets'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 import { MessageSignerWalletAdapterProps } from '@solana/wallet-adapter-base'
-import '@solana/wallet-adapter-react-ui/styles.css'
 import { useEffect, useMemo } from 'react'
 import { encode } from 'bs58'
 import accountApi from '@/apis/account.api'
+import '@solana/wallet-adapter-react-ui/styles.css'
 
 async function login(address: string, signMessage?: MessageSignerWalletAdapterProps['signMessage']) {
   if (!signMessage) return
@@ -68,9 +68,14 @@ function SolanaWalletConnect() {
     const token = localStorage.getItem('token')
     if (token) return
 
-    login(publicKey.toString(), signMessage).then((token) => {
-      if (token) localStorage.setItem('token', token)
-    })
+    login(publicKey.toString(), signMessage)
+      .then((token) => {
+        if (token) localStorage.setItem('token', token)
+      })
+      .catch((e) => {
+        console.log(e)
+        disconnect()
+      })
   }, [publicKey, signMessage, disconnect])
 
   useEffect(() => {
