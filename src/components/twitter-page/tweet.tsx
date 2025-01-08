@@ -23,13 +23,8 @@ export default function Tweet({ onToast }: { onToast: (props: TToastProps) => vo
       if (data.twitter_user_name) throw new Error('You have already bound your Twitter account.')
 
       const verifyRes = await api.getTwitterVerifyCode(address)
-      const code = verifyRes.data?.code
-      if (!code) throw new Error('Failed to get verification code.')
-
-      const twitterBotName = import.meta.env.VITE_TWITTER_BOT
-      const tweetText = `Verify my X account for my # Fasting & Food Science\nid: ${code} @${twitterBotName}`
-      const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`
-      window.open(tweetUrl, '_blank')
+      if (!verifyRes.data?.link) throw new Error('Failed to get verification code.')
+      window.open(verifyRes.data?.link, '_blank')
     } catch (e) {
       console.log(e)
       onToast({ type: 'fail', message: e.message })
