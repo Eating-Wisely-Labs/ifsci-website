@@ -1,10 +1,18 @@
 import { AxiosInstance } from 'axios'
 import request, { IPaginationParams, IResponse } from './request'
 
+export interface IFoodItem {
+  name: string
+  unit: string
+  value: string
+}
+
 export interface IAnalysisRecord {
   uid: string
   create_time: number
   text: string
+  image: string
+  food_items: IFoodItem[]
 }
 
 export interface IAnalysisRecordResponse {

@@ -27,6 +27,10 @@ function MobileNavigation() {
     navigate('/link/twitter')
   }
 
+  async function handleProfileClick() {
+    navigate(`/profile/${publicKey?.toString()}`)
+  }
+
   return (
     <div className="flex md:hidden">
       <MenuIcon onClick={toggleMobileMenu}></MenuIcon>
@@ -64,19 +68,29 @@ function MobileNavigation() {
               </a>
             </li>
             <li>
-              <a href="https://s.ifsci.wtf/static/whitepaper.pdf" target="_blank" className="flex justify-between py-6">
+              <a
+                href="https://s.ifsci.wtf/static/whitepaper.pdf"
+                target="_blank"
+                className="flex justify-between py-6 transition-all"
+              >
                 <span>Whitepaper</span>
                 <ChevronRight></ChevronRight>
               </a>
             </li>
             {publicKey && (
               <>
-                <li onClick={handleLinkTwitter}>
+                <li onClick={handleProfileClick} className="transition-all hover:text-primary">
+                  <span className="flex justify-between py-6">
+                    <span>Profile</span>
+                    <ChevronRight></ChevronRight>
+                  </span>
+                </li>
+                {/* <li onClick={handleLinkTwitter}>
                   <span className="flex justify-between py-6">
                     <span>Link Twitter</span>
                     <ChevronRight></ChevronRight>
                   </span>
-                </li>
+                </li> */}
                 <li onClick={handleDisconnect}>
                   <span className="flex justify-between py-6">
                     <span>Disconnect</span>
@@ -117,6 +131,10 @@ export default function PageHeader() {
     navigate('/link/twitter')
   }
 
+  async function handleProfileClick() {
+    navigate(`/profile/${publicKey?.toString()}`)
+  }
+
   return (
     <header className="fixed top-0 z-[99] w-full bg-black/20 px-6 py-4 text-white backdrop-blur-lg">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between">
@@ -126,13 +144,21 @@ export default function PageHeader() {
         </a>
         <MobileNavigation />
         <nav className="hidden h-full justify-between gap-8 md:flex">
-          <a href="https://s.ifsci.wtf/static/whitepaper.pdf" target="_blank" className="hover:text-primary">
+          <a
+            href="https://s.ifsci.wtf/static/whitepaper.pdf"
+            target="_blank"
+            className="transition-all hover:text-primary"
+          >
             Whitepaper
           </a>
           {publicKey ? (
             <>
-              {/* <div onClick={handleProfileClick}>Profile</div> */}
-              <div onClick={handleLinkTwitter}>Link Twitter</div>
+              <div onClick={handleProfileClick} className="cursor-pointer transition-all hover:text-primary">
+                Profile
+              </div>
+              {/* <div onClick={handleLinkTwitter} className="transition-all hover:text-primary cursor-pointer">
+                Link Twitter
+              </div> */}
               <Dropdown className="h-full" menu={[{ label: 'Disconnect', onClick: handleDisconnect }]}>
                 <div className="flex items-center gap-2">
                   <Wallet />
@@ -141,7 +167,9 @@ export default function PageHeader() {
               </Dropdown>
             </>
           ) : (
-            <div onClick={() => setVisible(true)}>Connect Wallet</div>
+            <div onClick={() => setVisible(true)} className="cursor-pointer transition-all hover:text-primary">
+              Connect Wallet
+            </div>
           )}
         </nav>
       </div>

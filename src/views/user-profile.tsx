@@ -6,17 +6,17 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Spin from '@/components/ui/spin'
 import { AnalysisRecordCard } from '@/components/user-profile/analysis-record-card'
-import { ErrorBoundary } from '@/components/common/error-boundary'
-import { useUserStore } from '@/stores/user.store'
+import { userStoreActions, useUserStore } from '@/stores/user.store'
+import { Pagination } from '@/components/ui/pagination'
 
 interface UserProfileProps {
   className?: string
 }
 
 const RecordsList = () => {
-  const { records } = useProfileStore()
+  const { records, total, pageSize } = useProfileStore()
   const params = useParams()
-  const [page] = useState(1)
+  const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -28,12 +28,19 @@ const RecordsList = () => {
       .finally(() => setLoading(false))
   }, [params.address, page])
 
+  const totalPage = useMemo(() => {
+    return Math.ceil(total / pageSize)
+  }, [total, pageSize])
+
   return (
     <Spin loading={loading}>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {records.map((record, index) => (
           <AnalysisRecordCard record={record} key={index}></AnalysisRecordCard>
         ))}
+      </div>
+      <div>
+        <Pagination current={page} total={totalPage} onChange={(page) => setPage(page)}></Pagination>
       </div>
     </Spin>
   )
@@ -54,42 +61,72 @@ const UserProfile: React.FC<UserProfileProps> = ({ className }) => {
     navigate('/link/twitter')
   }
 
+  useEffect(() => {
+    if (!publicKey) return
+    userStoreActions.getTwitterUserInfo(publicKey.toString())
+  }, [publicKey])
+
+  function handleShareTwitter() {
+    const shareLink = `https://ifsci.wtf/profile/${publicKey?.toString()}`
+    const shareText = `Check out my food analysis records on ifsci.wtf!`
+    const url = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`
+    window.open(url, '_blank')
+  }
+
+  function handleHaveATry() {
+    const shareText = `@${import.meta.env.VITE_TWITTER_BOT},  `
+    const url = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}`
+    window.open(url, '_blank')
+  }
+
   return (
-    <div className={`pt-[100px] ${className || ''}`}>
+    <div className={`py-[100px] ${className || ''}`}>
       <PageHeader />
       <div className="px-6">
         <div className="mx-auto max-w-[1200px] bg-black text-white">
           {/* Wallet Address */}
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-8">
             <div className="flex items-center gap-2">
               <span className="text-gray-400">Wallet address</span>
-              <div className="rounded bg-gray-900 px-4 py-2">{shortenAddress(params.address || '')}</div>
+              <div className="rounded border border-white/15 px-4 py-2">{shortenAddress(params.address || '')}</div>
             </div>
-
-            {isMyProfile && (
-              <button className="flex items-center gap-2 rounded-full bg-[#9eff00] px-6 py-2 text-black">
+          </div>
+          {/* Food Analysis Records Title */}
+          <div className="mb-8 flex items-center justify-between">
+            <h1 className="text-lg font-bold sm:text-3xl">Food Analysis Records</h1>
+            {isMyProfile && twitter_user_name && (
+              <button
+                className="flex items-center gap-2 rounded-full bg-primary px-6 py-2 text-black"
+                onClick={handleShareTwitter}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" className="size-5" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                 </svg>
                 Share
               </button>
             )}
+            {!isMyProfile && (
+              <button
+                className="flex items-center gap-2 rounded-full bg-primary px-6 py-2 text-black"
+                onClick={handleHaveATry}
+              >
+                Have a try
+              </button>
+            )}
           </div>
-
-          {/* Food Analysis Records Title */}
-          <h1 className="mb-8 text-3xl font-bold">Food Analysis Records</h1>
           {/* Grid of Food Records */}
-          <ErrorBoundary>
-            {!twitter_user_name && (
+
+          {!twitter_user_name && isMyProfile && (
+            <div className="flex w-full items-center justify-center rounded-2xl border border-white/20 py-20">
               <button
                 onClick={handleLinkTwitter}
-                className="flex items-center gap-2 rounded-full bg-[#9eff00] px-6 py-2 text-black"
+                className="flex items-center gap-2 rounded-full bg-primary px-6 py-2 text-black"
               >
                 Link Twitter
               </button>
-            )}
-            <RecordsList />
-          </ErrorBoundary>
+            </div>
+          )}
+          <RecordsList />
         </div>
       </div>
     </div>

@@ -12,8 +12,8 @@ export default function PageFooter() {
   return (
     <footer className="mx-auto max-w-[1200px] bg-[#000] px-6 text-[#fff]">
       <div className="flex justify-between py-8 md:py-[80px]">
-        <a href="https://x.com/adesciagent" target="_blank" rel="noopener noreferrer">
-          Follow @adesciagent
+        <a href="https://x.com/ifsci_ai" target="_blank" rel="noopener noreferrer">
+          Follow @ifsci_ai
         </a>
         <div className="flex gap-6 text-white">
           <a href={socialLinks.twitter} className="block h-8 p-[3px]" target="_blank" rel="noopener noreferrer">
@@ -26,7 +26,9 @@ export default function PageFooter() {
             <img src={DocumentationIcon} alt="Documentation" className="size-full" />
           </a>
         </div>
-        {/* <a href="https://t.me/">Join Telegram</a> */}
+        <a href="https://t.me/ifsci" target="_blank" rel="noopener noreferrer">
+          Join Telegram
+        </a>
       </div>
     </footer>
   )
