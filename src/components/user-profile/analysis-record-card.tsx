@@ -16,6 +16,13 @@ interface AnalysisRecordCardProps {
   record: IAnalysisRecord
 }
 
+const FOOD_ITEM_MAPPING = {
+  calories: true,
+  protein: true,
+  carbs: true,
+  fat: true
+} as const
+
 export const AnalysisRecordCard = memo(function AnalysisRecordCard({ record }: AnalysisRecordCardProps) {
   const formattedRecord: IFormattedRecord = useMemo(() => {
     const item = { image: '', calories: '', protein: '', carbs: '', fat: '', text: '', datetime: '' }
@@ -24,17 +31,8 @@ export const AnalysisRecordCard = memo(function AnalysisRecordCard({ record }: A
     item.image = record.image
 
     record.food_items.forEach((foodItem) => {
-      if (foodItem.name === 'calories') {
-        item.calories = `${foodItem.value} ${foodItem.unit}`
-      }
-      if (foodItem.name === 'protein') {
-        item.protein = `${foodItem.value} ${foodItem.unit}`
-      }
-      if (foodItem.name === 'carbs') {
-        item.carbs = `${foodItem.value} ${foodItem.unit}`
-      }
-      if (foodItem.name === 'fat') {
-        item.fat = `${foodItem.value} ${foodItem.unit}`
+      if (foodItem.name in FOOD_ITEM_MAPPING) {
+        item[foodItem.name as keyof typeof FOOD_ITEM_MAPPING] = `${foodItem.value} ${foodItem.unit}`
       }
     })
     return item

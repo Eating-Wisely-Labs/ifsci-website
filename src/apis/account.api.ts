@@ -5,12 +5,12 @@ class twitterApi {
   constructor(private request: AxiosInstance) {}
 
   async getSignMessage(address: string) {
-    const res = await this.request.post<IResponse<{ message: string }>>('/ffs/account/code', { user_id: address })
+    const res = await this.request.post<IResponse<{ message: string }>>('/web/account/code', { user_id: address })
     return res.data
   }
 
   async login(props: { address: string; signature: string; message: string }) {
-    const res = await this.request.post<IResponse<{ token: string }>>('/ffs/account/login', props)
+    const res = await this.request.post<IResponse<{ token: string }>>('/web/account/login', props)
     return res.data
   }
 }

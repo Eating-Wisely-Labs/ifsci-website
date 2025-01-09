@@ -12,7 +12,7 @@ export interface IAnalysisRecord {
   create_time: number
   text: string
   image: string
-  food_items: IFoodItem[]
+  food_items: readonly IFoodItem[]
 }
 
 export interface IAnalysisRecordResponse {
@@ -26,7 +26,7 @@ class UserApi {
   constructor(private request: AxiosInstance) {}
 
   async getAnalysisRecords(params: IPaginationParams & { user_id: string }) {
-    const res = await this.request.post<IResponse<IAnalysisRecordResponse>>('/ffs/post/page', params)
+    const res = await this.request.post<IResponse<IAnalysisRecordResponse>>('/web/post/page', params)
     return res.data
   }
 }

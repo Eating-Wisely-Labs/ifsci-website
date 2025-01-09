@@ -2,7 +2,7 @@ import userApi, { IAnalysisRecord } from '@/apis/user.api'
 import { proxy, snapshot } from 'valtio'
 
 export interface IProfileStore {
-  records: IAnalysisRecord[]
+  records: readonly IAnalysisRecord[]
   page: number | null
   total: number
   pageSize: number

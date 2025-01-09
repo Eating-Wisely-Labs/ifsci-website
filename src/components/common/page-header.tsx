@@ -23,10 +23,6 @@ function MobileNavigation() {
     disconnect()
   }
 
-  async function handleLinkTwitter() {
-    navigate('/link/twitter')
-  }
-
   async function handleProfileClick() {
     navigate(`/profile/${publicKey?.toString()}`)
   }
@@ -85,12 +81,6 @@ function MobileNavigation() {
                     <ChevronRight></ChevronRight>
                   </span>
                 </li>
-                {/* <li onClick={handleLinkTwitter}>
-                  <span className="flex justify-between py-6">
-                    <span>Link Twitter</span>
-                    <ChevronRight></ChevronRight>
-                  </span>
-                </li> */}
                 <li onClick={handleDisconnect}>
                   <span className="flex justify-between py-6">
                     <span>Disconnect</span>
@@ -127,10 +117,6 @@ export default function PageHeader() {
     disconnect()
   }
 
-  async function handleLinkTwitter() {
-    navigate('/link/twitter')
-  }
-
   async function handleProfileClick() {
     navigate(`/profile/${publicKey?.toString()}`)
   }
@@ -156,9 +142,6 @@ export default function PageHeader() {
               <div onClick={handleProfileClick} className="cursor-pointer transition-all hover:text-primary">
                 Profile
               </div>
-              {/* <div onClick={handleLinkTwitter} className="transition-all hover:text-primary cursor-pointer">
-                Link Twitter
-              </div> */}
               <Dropdown className="h-full" menu={[{ label: 'Disconnect', onClick: handleDisconnect }]}>
                 <div className="flex items-center gap-2">
                   <Wallet />

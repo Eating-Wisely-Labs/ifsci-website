@@ -7,14 +7,14 @@ class twitterApi {
   constructor(private request: AxiosInstance) {}
 
   async getTwitterVerifyCode(address: string) {
-    const res = await this.request.post<IResponse<{ code: string; link: string }>>('/ffs/twitter/code', {
+    const res = await this.request.post<IResponse<{ code: string; link: string }>>('/web/twitter/code', {
       user_id: address
     })
     return res.data
   }
 
   async getTwitterUserInfo(address: string) {
-    const res = await this.request.post<IResponse<{ twitter_user_name: string | null }>>('/ffs/twitter/user', {
+    const res = await this.request.post<IResponse<{ twitter_user_name: string | null }>>('/web/twitter/user', {
       user_id: address
     })
     return res.data
@@ -27,12 +27,12 @@ class twitterApi {
         twitter_user_name: string
         message: string
       }
-    }>('/ffs/twitter/verify', { user_id: address, link: twitterShareLink })
+    }>('/web/twitter/verify', { user_id: address, link: twitterShareLink })
     return res.data
   }
 
   async unbindTwitter(address: string) {
-    const res = await this.request.post('/ffs/twitter/unbind', { user_id: address })
+    const res = await this.request.post('/web/twitter/unbind', { user_id: address })
     return res.data
   }
 }
