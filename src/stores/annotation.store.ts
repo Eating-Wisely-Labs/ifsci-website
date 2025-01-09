@@ -29,6 +29,7 @@ async function getAnnotationRecords(address: string, page: number) {
   annotationStore.page = res.data.page_no
   annotationStore.total = res.data.count
   annotationStore.pageSize = res.data.page_size
+  return res.data
 }
 
 export const annotationStoreActions = {

@@ -8,7 +8,6 @@ import Spin from '@/components/ui/spin'
 import { userStoreActions, useUserStore } from '@/stores/user.store'
 import { Pagination } from '@/components/ui/pagination'
 import { TwitterActions } from '@/components/user-profile/twitter-actions'
-import { IAnalysisRecord } from '@/apis/user.api'
 import { AnnotationItem } from '@/components/annotation/annotation-item'
 
 interface AnnotationListProps {
@@ -48,8 +47,8 @@ const RecordsList = () => {
                 key={index}
                 record={record}
                 description={record.text}
-                images={[record.image, record.image, record.image]} // 这里需要根据实际API返回的数据调整
-                points={10} // 这里需要根据实际API返回的数据调整
+                images={[record.image, record.image, record.image]}
+                points={10}
               />
             ))}
           </div>
