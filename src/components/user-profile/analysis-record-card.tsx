@@ -13,7 +13,7 @@ interface IFormattedRecord {
 }
 
 interface AnalysisRecordCardProps {
-  record: IAnalysisRecord
+  record?: IAnalysisRecord
 }
 
 const FOOD_ITEM_MAPPING = {
@@ -26,11 +26,11 @@ const FOOD_ITEM_MAPPING = {
 export const AnalysisRecordCard = memo(function AnalysisRecordCard({ record }: AnalysisRecordCardProps) {
   const formattedRecord: IFormattedRecord = useMemo(() => {
     const item = { image: '', calories: '', protein: '', carbs: '', fat: '', text: '', datetime: '' }
-    item.datetime = dayjs(record.create_time * 1000).format('YYYY-MM-DD h:mm A')
-    item.text = record.text
-    item.image = record.image
+    item.datetime = record ? dayjs(record.create_time * 1000).format('YYYY-MM-DD h:mm A') : ''
+    item.text = record?.text ?? ''
+    item.image = record?.image ?? ''
 
-    record.food_items.forEach((foodItem) => {
+    record?.food_items.forEach((foodItem) => {
       if (foodItem.name in FOOD_ITEM_MAPPING) {
         item[foodItem.name as keyof typeof FOOD_ITEM_MAPPING] = `${foodItem.value} ${foodItem.unit}`
       }
@@ -45,7 +45,7 @@ export const AnalysisRecordCard = memo(function AnalysisRecordCard({ record }: A
         <img
           src={formattedRecord.image}
           alt="Food"
-          className="mb-5 aspect-[16/9] size-full rounded-xl bg-white object-cover"
+          className="mb-5 aspect-[16/9] size-full rounded-xl bg-white/5 object-cover"
         />
       </div>
 

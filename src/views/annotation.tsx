@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import PageHeader from '@/components/common/page-header'
 import AnnotationInput, { AnnotationData } from '@/components/annotation/annotation-input'
 import { useParams } from 'react-router-dom'
+import { AnalysisRecordCard } from '@/components/user-profile/analysis-record-card'
+import userApi, { IAnalysisRecord } from '@/apis/user.api'
 
 interface AnnotationProps {
   className?: string
@@ -13,10 +15,14 @@ export default function Annotation({ className }: AnnotationProps) {
     images: []
   })
 
+  const [record, setRecord] = useState<IAnalysisRecord>()
   const params = useParams()
 
   useEffect(() => {
     if (!params.id) return
+    userApi.getAnalysisRecord(params.id).then((res) => {
+      setRecord(res.data)
+    })
   }, [params.id])
 
   const handleSubmit = () => {
@@ -35,43 +41,7 @@ export default function Annotation({ className }: AnnotationProps) {
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {/* Left Column - Food Card */}
-            <div className="rounded-2xl bg-[#1A1A1A] p-6">
-              <img
-                src="https://example.com/food-image.jpg" // Replace with actual image source
-                alt="Food"
-                className="mb-6 h-[300px] w-full rounded-lg object-cover"
-              />
-
-              <div className="mb-4 rounded-lg">
-                <div className="rounded-t-lg bg-white px-4 py-2 text-black">
-                  <div className="flex justify-between">
-                    <span>Calories:</span>
-                    <span>450 kcal</span>
-                  </div>
-                </div>
-                <div className="space-y-2 p-4 text-black">
-                  <div className="flex justify-between">
-                    <span>Protein:</span>
-                    <span>450 g</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Carbs:</span>
-                    <span>60 g</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Fat:</span>
-                    <span>15 g</span>
-                  </div>
-                </div>
-              </div>
-
-              <p className="mb-4 text-gray-400">
-                A balanced meal with moderate calories. Good protein and carbs but could reduce fat for a healthier
-                option.
-              </p>
-
-              <div className="text-sm text-gray-500">2024-01-02 07:45 PM</div>
-            </div>
+            <AnalysisRecordCard record={record}></AnalysisRecordCard>
 
             {/* Right Column - Annotation Form */}
             <div className="rounded-2xl bg-[#1A1A1A] p-6">

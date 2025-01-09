@@ -29,6 +29,7 @@ async function getAnalysisRecords(address: string, page: number) {
   profileStore.page = res.data.page_no
   profileStore.total = res.data.count
   profileStore.pageSize = res.data.page_size
+  return res.data
 }
 
 export const profileStoreActions = {
