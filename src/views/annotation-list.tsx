@@ -3,13 +3,13 @@ import { annotationStoreActions, useAnnotationStore } from '@/stores/annotation.
 import { shortenAddress } from '@/utils/shorten-address'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Spin from '@/components/ui/spin'
-import { AnalysisRecordCard } from '@/components/user-profile/analysis-record-card'
 import { userStoreActions, useUserStore } from '@/stores/user.store'
 import { Pagination } from '@/components/ui/pagination'
 import { TwitterActions } from '@/components/user-profile/twitter-actions'
 import { IAnalysisRecord } from '@/apis/user.api'
+import { AnnotationItem } from '@/components/annotation/annotation-item'
 
 interface AnnotationListProps {
   className?: string
@@ -21,7 +21,7 @@ const RecordsList = () => {
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const totalPages = useMemo(() => Math.ceil(total / pageSize), [total, pageSize])
-  const navigate = useNavigate()
+  const [noData, setNoData] = useState(false)
 
   useEffect(() => {
     if (!params.address) return
@@ -29,26 +29,35 @@ const RecordsList = () => {
     setLoading(true)
     annotationStoreActions
       .getAnnotationRecords(params.address, page)
+      .then((data) => {
+        if (data.count === 0) setNoData(true)
+      })
       .catch(console.error)
       .finally(() => setLoading(false))
   }, [params.address, page])
 
-  const handleCardClick = (record: IAnalysisRecord) => {
-    navigate(`/s/${record.uid}`)
-  }
-
   return (
     <Spin loading={loading}>
-      <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {records.map((record, index) => (
-          <div key={index} className="cursor-pointer" onClick={() => handleCardClick(record)}>
-            <AnalysisRecordCard record={record} />
+      {noData ? (
+        <div className="flex h-[120px] items-center justify-center rounded-2xl border border-white/15">No Data</div>
+      ) : (
+        <>
+          <div className="mb-10 space-y-6">
+            {records.map((record, index) => (
+              <AnnotationItem
+                key={index}
+                record={record}
+                description={record.text}
+                images={[record.image, record.image, record.image]} // 这里需要根据实际API返回的数据调整
+                points={10} // 这里需要根据实际API返回的数据调整
+              />
+            ))}
           </div>
-        ))}
-      </div>
-      <div>
-        <Pagination current={page} total={totalPages} onChange={setPage} />
-      </div>
+          <div>
+            <Pagination current={page} total={totalPages} onChange={setPage} />
+          </div>
+        </>
+      )}
     </Spin>
   )
 }

@@ -44,7 +44,7 @@ export default function Verify({ onToast }: { onToast: (props: TToastProps) => v
       }
     } catch (e) {
       console.log(e)
-      onToast({ type: 'fail', message: 'Failed to verify twitter account' })
+      onToast({ type: 'fail', message: 'Failed to verify X account' })
     } finally {
       setLoading(false)
     }
@@ -54,8 +54,9 @@ export default function Verify({ onToast }: { onToast: (props: TToastProps) => v
     <div className="items-center lg:flex lg:gap-[60px]">
       <div className="mt-1 flex-1 space-y-6 py-7 text-white">
         <h3 className="text-lg font-bold">STEP 3</h3>
-        <p className="font-normal tracking-tighter">
-          On your tweet, find the share button. Copy link and paste it here. Click the button to verify your account.
+        <p className="font-normal tracking-tighter lg:text-lg">
+          Once posted, look for the share button and copy the link. Input the link below and click on "Verify" to link
+          your account.
         </p>
         <div className="lg:flex lg:items-center lg:gap-3">
           <input

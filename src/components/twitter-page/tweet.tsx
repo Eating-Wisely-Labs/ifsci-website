@@ -20,7 +20,7 @@ export default function Tweet({ onToast }: { onToast: (props: TToastProps) => vo
     try {
       const address = publicKey.toString()
       const { data } = await api.getTwitterUserInfo(address)
-      if (data.twitter_user_name) throw new Error('You have already bound your Twitter account.')
+      if (data.twitter_user_name) throw new Error('You have already bound your X account.')
 
       const verifyRes = await api.getTwitterVerifyCode(address)
       if (!verifyRes.data?.link) throw new Error('Failed to get verification code.')
@@ -37,8 +37,8 @@ export default function Tweet({ onToast }: { onToast: (props: TToastProps) => vo
     <div className="items-center lg:flex lg:gap-[60px]">
       <div className="mt-1 flex-1 space-y-6 py-6 text-white">
         <h3 className="text-lg font-bold lg:text-xl">STEP 2</h3>
-        <p className="font-normal tracking-tighter lg:text-base">
-          Please click this button below and tweet a verification message on Twitter.
+        <p className="font-normal tracking-tighter lg:text-lg">
+          Click this button below and post a verification message on X
         </p>
         <button
           disabled={!publicKey}

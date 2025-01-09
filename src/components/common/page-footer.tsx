@@ -17,7 +17,7 @@ export default function PageFooter() {
         </a>
         <div className="flex gap-6 text-white">
           <a href={socialLinks.twitter} className="block h-8 p-[3px]" target="_blank" rel="noopener noreferrer">
-            <img src={TwitterIcon} alt="Twitter" className="size-full" />
+            <img src={TwitterIcon} alt="X" className="size-full" />
           </a>
           <a href={socialLinks.dexScreener} className="block h-8" target="_blank" rel="noopener noreferrer">
             <img src={DexScreenerIcon} alt="DexScreener" className="size-full" />

@@ -12,7 +12,7 @@ export const TwitterActions: React.FC<TwitterActionsProps> = ({ hasBindTwitter, 
   const { publicKey } = useWallet()
 
   const handleLinkTwitter = () => {
-    navigate('/link/twitter')
+    navigate('/link/x')
   }
 
   const handleShareTwitter = () => {
@@ -40,7 +40,7 @@ export const TwitterActions: React.FC<TwitterActionsProps> = ({ hasBindTwitter, 
         onClick={handleShareTwitter}
       >
         <Share2 />
-        Share on Twitter
+        Share on X
       </button>
     )
   }
@@ -51,7 +51,7 @@ export const TwitterActions: React.FC<TwitterActionsProps> = ({ hasBindTwitter, 
         className="flex items-center gap-2 rounded-full bg-primary px-6 py-2 text-black"
         onClick={handleLinkTwitter}
       >
-        Link Twitter
+        Link X
       </button>
     )
   }

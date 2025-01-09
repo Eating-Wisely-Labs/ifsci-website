@@ -4,6 +4,7 @@ import AnnotationInput, { AnnotationData } from '@/components/annotation/annotat
 import { useParams } from 'react-router-dom'
 import { AnalysisRecordCard } from '@/components/user-profile/analysis-record-card'
 import userApi, { IAnalysisRecord } from '@/apis/user.api'
+import { HelpCircle } from 'lucide-react'
 
 interface AnnotationProps {
   className?: string
@@ -36,7 +37,14 @@ export default function Annotation({ className }: AnnotationProps) {
         <div className="mx-auto max-w-[1200px]">
           <div className="mb-8 flex items-center justify-between">
             <h1 className="text-3xl font-bold">Food Annotation</h1>
-            <div className="rounded-full border border-white px-4 py-2">Level up Label</div>
+            <a
+              className="rounded-full border border-white px-4 py-2"
+              href="https://fasting.super.site/level-up-your-labels"
+              target="_blank"
+            >
+              <HelpCircle className="mr-2 inline-block" size={18} />
+              Help
+            </a>
           </div>
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">

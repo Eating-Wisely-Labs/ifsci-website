@@ -12,7 +12,7 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage></HomePage>} />
-        <Route path="/link/twitter" element={<LinkTwitter></LinkTwitter>} />
+        <Route path="/link/x" element={<LinkTwitter></LinkTwitter>} />
         <Route path="/profile/:address" element={<UserProfile></UserProfile>} />
         <Route path="/annotation/:address" element={<AnnotationList></AnnotationList>} />
         <Route path="/s/:id" element={<Annotation></Annotation>} />
