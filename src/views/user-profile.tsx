@@ -42,8 +42,8 @@ const RecordsList = () => {
       ) : (
         <>
           <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {records.map((record, index) => (
-              <AnalysisRecordCard record={record} key={index} />
+            {records.map((record) => (
+              <AnalysisRecordCard record={record} key={record.comment_uid} />
             ))}
           </div>
           <div>

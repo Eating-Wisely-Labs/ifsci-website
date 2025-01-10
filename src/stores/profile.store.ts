@@ -1,8 +1,8 @@
-import userApi, { IAnalysisRecord } from '@/apis/user.api'
+import postApi, { IPostRecord } from '@/apis/post.api'
 import { proxy, snapshot } from 'valtio'
 
 export interface IProfileStore {
-  records: readonly IAnalysisRecord[]
+  records: readonly IPostRecord[]
   page: number | null
   total: number
   pageSize: number
@@ -20,7 +20,7 @@ export function useProfileStore() {
 }
 
 async function getAnalysisRecords(address: string, page: number) {
-  const res = await userApi.getAnalysisRecords({
+  const res = await postApi.getPostList({
     user_id: address,
     page_no: page,
     page_size: profileStore.pageSize

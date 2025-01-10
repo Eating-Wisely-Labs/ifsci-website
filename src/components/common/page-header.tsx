@@ -27,6 +27,10 @@ function MobileNavigation() {
     navigate(`/profile/${publicKey?.toString()}`)
   }
 
+  async function handleAnnotationsClick() {
+    navigate(`/annotations/${publicKey?.toString()}`)
+  }
+
   return (
     <div className="flex md:hidden">
       <MenuIcon onClick={toggleMobileMenu}></MenuIcon>
@@ -81,6 +85,12 @@ function MobileNavigation() {
                     <ChevronRight></ChevronRight>
                   </span>
                 </li>
+                <li onClick={handleAnnotationsClick} className="transition-all hover:text-primary">
+                  <span className="flex justify-between py-6">
+                    <span>Annotations</span>
+                    <ChevronRight></ChevronRight>
+                  </span>
+                </li>
                 <li onClick={handleDisconnect}>
                   <span className="flex justify-between py-6">
                     <span>Disconnect</span>
@@ -121,6 +131,10 @@ export default function PageHeader() {
     navigate(`/profile/${publicKey?.toString()}`)
   }
 
+  async function handleAnnotationsClick() {
+    navigate(`/annotations/${publicKey?.toString()}`)
+  }
+
   return (
     <header className="fixed top-0 z-[99] w-full bg-black/20 px-6 py-4 text-white backdrop-blur-lg">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between">
@@ -142,7 +156,13 @@ export default function PageHeader() {
               <div onClick={handleProfileClick} className="cursor-pointer transition-all hover:text-primary">
                 Profile
               </div>
-              <Dropdown className="h-full" menu={[{ label: 'Disconnect', onClick: handleDisconnect }]}>
+              <Dropdown
+                className="h-full"
+                menu={[
+                  { label: 'Annotations', onClick: handleAnnotationsClick },
+                  { label: 'Disconnect', onClick: handleDisconnect }
+                ]}
+              >
                 <div className="flex items-center gap-2">
                   <Wallet />
                   {shortenAddress(publicKey?.toString() || '')}

@@ -1,4 +1,4 @@
-import { IAnalysisRecord } from '@/apis/user.api'
+import { IPostRecord } from '@/apis/post.api'
 import dayjs from 'dayjs'
 import { memo, useMemo } from 'react'
 
@@ -13,7 +13,7 @@ interface IFormattedRecord {
 }
 
 interface AnalysisRecordCardProps {
-  record?: IAnalysisRecord
+  record?: IPostRecord
 }
 
 const FOOD_ITEM_MAPPING = {
@@ -42,11 +42,15 @@ export const AnalysisRecordCard = memo(function AnalysisRecordCard({ record }: A
     <div className="overflow-hidden rounded-xl bg-white bg-opacity-[8%] p-6">
       {/* Food Image */}
       <div className="relative">
-        <img
-          src={formattedRecord.image}
-          alt="Food"
-          className="mb-5 aspect-[16/9] size-full rounded-xl bg-white/5 object-cover"
-        />
+        {formattedRecord.image ? (
+          <img
+            src={formattedRecord.image}
+            alt="Food"
+            className="mb-5 aspect-[16/9] size-full rounded-xl bg-white/5 object-cover"
+          />
+        ) : (
+          <div className="mb-5 aspect-[16/9] size-full rounded-xl bg-white/20 object-cover"></div>
+        )}
       </div>
 
       {/* Nutrition Info */}

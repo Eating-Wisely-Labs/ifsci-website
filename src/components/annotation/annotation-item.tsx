@@ -1,51 +1,45 @@
-import { IAnalysisRecord } from '@/apis/user.api'
+import { IAnnotationRecord } from '@/apis/post.api'
 import { memo } from 'react'
 
 interface AnnotationItemProps {
-  record?: IAnalysisRecord
+  record?: IAnnotationRecord
   className?: string
-  images?: string[]
-  description?: string
-  points?: number
 }
 
-export const AnnotationItem = memo(function AnnotationItem({
-  record,
-  className,
-  images = [],
-  description,
-  points
-}: AnnotationItemProps) {
+export const AnnotationItem = memo(function AnnotationItem({ record, className }: AnnotationItemProps) {
   return (
-    <div className={`flex gap-6 rounded-2xl bg-black/50 p-6 ${className || ''}`}>
+    <section
+      className={`flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/50 p-4 md:flex-row ${className || ''}`}
+    >
       {/* Main Image */}
-      <div className="flex-1">
+      <div className="basis-2/12">
         <img src={record?.image} alt="Food" className="aspect-[4/3] w-full rounded-xl bg-white/5 object-cover" />
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col">
-        {/* Description */}
-        <div className="mb-6 flex-1">
-          <p className="text-base text-white">{description}</p>
-        </div>
+      <div className="basis-4/12">
+        <h2 className="font-bold text-primary">Analysis Result: </h2>
+        <p className="text-base text-white">{record?.text}</p>
+      </div>
 
-        {/* Image Grid */}
+      <div className="basis-4/12">
+        <h2 className="font-bold text-primary">Annotation: </h2>
+        <div className="mb-4">{record?.annotation_data.content}</div>
         <div className="grid grid-cols-3 gap-2">
-          {images.map((image, index) => (
-            <div key={index} className="relative w-full overflow-hidden rounded-lg">
-              <img src={image} alt={`Reference ${index + 1}`} className="size-full object-cover" />
-            </div>
+          {record?.annotation_data.images.map((file, index) => (
+            <img
+              src={file.url}
+              alt={`Reference ${index + 1}`}
+              className="aspect-[16/9] rounded-lg border border-white/10 object-cover"
+            />
           ))}
         </div>
-
-        {/* Points */}
-        {typeof points === 'number' && (
-          <div className="mt-4 self-end rounded-full bg-[#65D01E] px-4 py-1 text-sm font-medium text-black">
-            {points} Points
-          </div>
-        )}
       </div>
-    </div>
+      <div className="flex basis-2/12 items-start md:justify-end">
+        <div className="inline-block rounded-full bg-[#65D01E] px-4 py-1 text-sm font-medium text-black">
+          {record?.annotation_data.score} Points
+        </div>
+      </div>
+    </section>
   )
 })

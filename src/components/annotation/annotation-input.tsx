@@ -1,99 +1,113 @@
-import { ChangeEvent, useRef, useState } from 'react'
-import AutoResizeTextarea from '@/components/ui/auto-resize-textarea'
-
-export interface AnnotationData {
-  text: string
-  images: string[] // Base64 encoded image strings
-}
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { Image } from 'lucide-react'
+import commonApi from '@/apis/common.api'
+import { IAnnotationData } from '@/apis/post.api'
 
 interface AnnotationInputProps {
-  value?: AnnotationData
-  onChange?: (data: AnnotationData) => void
+  value: IAnnotationData
+  onChange: (value: IAnnotationData) => void
   placeholder?: string
   className?: string
 }
 
+interface AutoResizeTextareaProps {
+  value: string
+  onChange: (value: string) => void
+  placeholder?: string
+  maxLength: number
+}
+
+const AutoResizeTextarea: React.FC<AutoResizeTextareaProps> = ({ value, onChange, placeholder, maxLength }) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px'
+    }
+  }, [value])
+
+  return (
+    <textarea
+      maxLength={maxLength}
+      ref={textareaRef}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className="min-h-[120px] w-full resize-none bg-white/0 outline-none"
+    />
+  )
+}
+
 export default function AnnotationInput({ value, onChange, placeholder, className }: AnnotationInputProps) {
-  const [localValue, setLocalValue] = useState<AnnotationData>(value || { text: '', images: [] })
+  const [localValue, setLocalValue] = useState<IAnnotationData>(value)
+  const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const newValue = { ...localValue, text: e.target.value }
-    setLocalValue(newValue)
-    onChange?.(newValue)
+  useEffect(() => {
+    onChange(localValue)
+  }, [localValue, onChange])
+
+  const handleTextChange = (text: string) => {
+    setLocalValue((prev) => ({ ...prev, content: text }))
   }
 
   const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
-    if (!files) return
+    if (!files || files.length === 0) return
 
-    const newImages: string[] = []
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-      if (!file.type.startsWith('image/')) continue
+    try {
+      setUploading(true)
+      const uploadPromises = Array.from(files).map((file) => commonApi.uploadFile(file))
+      const results = await Promise.all(uploadPromises)
+      const uploadedFiles = results.map((result) => ({
+        name: result.data.filename,
+        url: result.data.url
+      }))
 
-      try {
-        const base64 = await readFileAsBase64(file)
-        newImages.push(base64)
-      } catch (error) {
-        console.error('Error reading file:', error)
+      setLocalValue((prev) => ({
+        ...prev,
+        images: [...prev.images, ...uploadedFiles]
+      }))
+    } catch (error) {
+      console.error('Failed to upload images:', error)
+    } finally {
+      setUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
       }
     }
-
-    const newValue = {
-      ...localValue,
-      images: [...localValue.images, ...newImages]
-    }
-    setLocalValue(newValue)
-    onChange?.(newValue)
-
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
-  }
-
-  const handleImageClick = () => {
-    fileInputRef.current?.click()
   }
 
   const handleRemoveImage = (index: number) => {
-    const newImages = localValue.images.filter((_, i) => i !== index)
-    const newValue = { ...localValue, images: newImages }
-    setLocalValue(newValue)
-    onChange?.(newValue)
+    setLocalValue((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+    }))
   }
 
   return (
     <div className={className}>
       <div className="relative">
-        <div className="min-h-[300px] w-full resize-none rounded-lg bg-[#2A2A2A] p-4 text-white placeholder:text-gray-500 focus-within:ring-2 focus-within:ring-primary">
+        <div className="min-h-[300px] w-full resize-none rounded-lg bg-white/0 p-4 pb-16 text-white ring-2 placeholder:text-gray-500 focus-within:ring-primary">
           <AutoResizeTextarea
-            value={localValue.text}
+            value={localValue.content}
             onChange={handleTextChange}
             placeholder={placeholder}
-            minHeight={100}
+            maxLength={512}
           />
+
+          {/* Image Grid */}
           {localValue.images.length > 0 && (
-            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+            <div className="mt-4 grid grid-cols-3 gap-2">
               {localValue.images.map((image, index) => (
-                <div key={index} className="group relative">
-                  <img src={image} alt="" className="h-24 w-full rounded-lg object-cover" />
+                <div key={index} className="group relative aspect-[16/9]">
+                  <img src={image.url} alt="" className="size-full rounded-lg object-cover" />
                   <button
-                    type="button"
                     onClick={() => handleRemoveImage(index)}
-                    className="absolute right-2 top-2 hidden rounded-full bg-black/50 p-1 text-white group-hover:block"
+                    className="absolute right-1 top-1 hidden rounded-full bg-black/50 p-1 text-white hover:bg-black group-hover:block"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="size-4"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    ×
                   </button>
                 </div>
               ))}
@@ -101,46 +115,26 @@ export default function AnnotationInput({ value, onChange, placeholder, classNam
           )}
         </div>
 
-        <button type="button" onClick={handleImageClick} className="absolute bottom-4 right-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
+        {/* Upload Button */}
+        <div className="absolute bottom-4 right-4">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImageUpload}
+            className="hidden"
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white transition-all hover:bg-white/20"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-            />
-          </svg>
-        </button>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleImageUpload}
-          accept="image/*"
-          multiple
-          className="hidden"
-        />
+            <Image size={20} />
+            {uploading ? 'Uploading...' : 'Add Image'}
+          </button>
+        </div>
       </div>
     </div>
   )
-}
-
-function readFileAsBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        resolve(reader.result)
-      } else {
-        reject(new Error('Failed to read file as base64'))
-      }
-    }
-    reader.onerror = () => reject(reader.error)
-    reader.readAsDataURL(file)
-  })
 }

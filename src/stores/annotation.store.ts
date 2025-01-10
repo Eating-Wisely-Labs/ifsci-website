@@ -1,8 +1,8 @@
-import userApi, { IAnalysisRecord } from '@/apis/user.api'
+import postApi, { IAnnotationRecord } from '@/apis/post.api'
 import { proxy, snapshot } from 'valtio'
 
 export interface IAnnotationStore {
-  records: readonly IAnalysisRecord[]
+  records: readonly IAnnotationRecord[]
   page: number | null
   total: number
   pageSize: number
@@ -20,7 +20,7 @@ export function useAnnotationStore() {
 }
 
 async function getAnnotationRecords(address: string, page: number) {
-  const res = await userApi.getAnnotationRecords({
+  const res = await postApi.getAnnotationList({
     user_id: address,
     page_no: page,
     page_size: annotationStore.pageSize
