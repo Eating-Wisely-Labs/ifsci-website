@@ -18,7 +18,10 @@ export const TwitterActions: React.FC<TwitterActionsProps> = ({ hasBindTwitter, 
   const handleShareTwitter = () => {
     const shareLink = `https://ifsci.wtf/profile/${publicKey?.toString()}`
     const shareText = `Check out the nutritional analysis of my meals powered by the first vertical DeSAI agent to enhance your health and achieve your intermittent fasting goals! 
-User profile link:`
+
+$IFSCI 👀 💪
+
+⬇️ Click below to check our user profile!`
     const url = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`
     window.open(url, '_blank')
   }
