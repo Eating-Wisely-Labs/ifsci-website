@@ -4,6 +4,7 @@ import { userStoreActions, useUserStore } from '@/stores/user.store'
 import { shortenAddress } from '@/utils/shorten-address'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
+import dayjs from 'dayjs'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,14 +21,15 @@ const UserProfileHome: React.FC = () => {
   }, [token, publicKey])
 
   const handleCheckIn = () => {
+    const date = dayjs().format('h:mm A')
     const shareLink = `https://ifsci.wtf/profile/${publicKey?.toString()}`
-    const shareText = `Check out the nutritional analysis of my meals powered by the first vertical DeSAI agent to enhance your health and achieve your intermittent fasting goals! user profile link`
+    const shareText = `#Check in @${date}`
     const url = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`
     window.open(url, '_blank')
   }
 
   return (
-    <div>
+    <div className="text-white">
       <PageHeader></PageHeader>
       <div className="px-6">
         <div className="mx-auto max-w-[1200px] pt-[120px] text-white">
