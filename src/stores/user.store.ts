@@ -19,6 +19,11 @@ async function getTwitterUserInfo(address: string) {
   userStore.twitter_user_name = data.twitter_user_name
 }
 
+async function clear() {
+  userStore.twitter_user_name = ''
+}
+
 export const userStoreActions = {
-  getTwitterUserInfo
+  getTwitterUserInfo,
+  clear
 }

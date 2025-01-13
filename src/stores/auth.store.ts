@@ -1,4 +1,5 @@
 import { proxy, useSnapshot } from 'valtio'
+import { userStoreActions } from './user.store'
 
 export interface IAuthStore {
   token: string
@@ -13,6 +14,7 @@ export function useAuthStore() {
 }
 
 async function logout() {
+  userStoreActions.clear()
   localStorage.removeItem('token')
   authStore.token = ''
 }
