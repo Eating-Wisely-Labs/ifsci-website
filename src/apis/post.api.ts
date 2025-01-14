@@ -4,6 +4,7 @@ import request, { IPaginationParams, IResponse } from './request'
 export interface FileItem {
   name: string
   url: string
+  preview?: string
 }
 
 export interface IFoodItem {
@@ -19,6 +20,8 @@ export interface IPostRecord {
   text: string
   image: string
   food_items: readonly IFoodItem[]
+  annotation_data: IAnnotationData | null
+  food_post_score: number
 }
 
 export interface IPostListResponse {
@@ -44,6 +47,11 @@ export interface IAnnotationResult {
 export interface IAnnotationData {
   content: string
   images: readonly FileItem[]
+  category: string
+  brand: string
+  region: string
+  create_time?: number
+  id?: number
 }
 
 export interface IAnnotationRecord {
@@ -65,7 +73,7 @@ export interface IAnnotationListResponse {
 class PostApi {
   constructor(private request: AxiosInstance) {}
 
-  async getPostList(params: IPaginationParams & { user_id: string }) {
+  async getPostList(params: IPaginationParams & { user_id: string; annotation_user_id?: string }) {
     const res = await this.request.post<IResponse<IPostListResponse>>('/web/post/page', params)
     return res.data
   }
@@ -87,6 +95,11 @@ class PostApi {
 
   async getAnnotationList(params: IPaginationParams & { user_id: string }) {
     const res = await this.request.post<IResponse<IAnnotationListResponse>>('/web/annotation/page', params)
+    return res.data
+  }
+
+  async checkAnnotation(params: { user_id: string; code: string }) {
+    const res = await this.request.post<IResponse<{ can_annotation: 1 | 0 }>>('/web/annotation/check', params)
     return res.data
   }
 }

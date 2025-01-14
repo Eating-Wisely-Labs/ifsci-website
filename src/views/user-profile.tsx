@@ -9,6 +9,7 @@ import { AnalysisRecordCard } from '@/components/user-profile/analysis-record-ca
 import { userStoreActions, useUserStore } from '@/stores/user.store'
 import { Pagination } from '@/components/ui/pagination'
 import { TwitterActions } from '@/components/user-profile/twitter-actions'
+import { useAuthStore } from '@/stores/auth.store'
 
 interface UserProfileProps {
   className?: string
@@ -21,19 +22,23 @@ const RecordsList = () => {
   const [loading, setLoading] = useState(false)
   const totalPages = useMemo(() => Math.ceil(total / pageSize), [total, pageSize])
   const [noData, setNoData] = useState(false)
+  const { publicKey } = useWallet()
+  const { token } = useAuthStore()
 
   useEffect(() => {
     if (!params.address) return
+    if (token && !publicKey) return
+    const annotationUserId = publicKey?.toString()
 
     setLoading(true)
     profileStoreActions
-      .getAnalysisRecords(params.address, page)
+      .getAnalysisRecords(params.address, page, annotationUserId)
       .then((data) => {
         if (data.count === 0) setNoData(true)
       })
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [params.address, page])
+  }, [params.address, page, publicKey, token])
 
   return (
     <Spin loading={loading}>
@@ -43,7 +48,7 @@ const RecordsList = () => {
         <>
           <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {records.map((record) => (
-              <AnalysisRecordCard record={record} key={record.comment_uid} />
+              <AnalysisRecordCard record={record} key={record.comment_uid} showActions />
             ))}
           </div>
           <div>
