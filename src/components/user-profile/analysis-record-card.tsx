@@ -61,7 +61,7 @@ export const AnalysisRecordCard = memo(function AnalysisRecordCard({ record, sho
         ) : (
           <div className="mb-5 aspect-[16/9] size-full rounded-xl bg-white/20 object-cover"></div>
         )}
-        {formattedRecord.score && (
+        {formattedRecord.score > 0 && showActions && (
           <div className="absolute right-3 top-3 rounded-full bg-primary/80 px-2 py-1 text-xs text-black">
             {formattedRecord.score} Points
           </div>
