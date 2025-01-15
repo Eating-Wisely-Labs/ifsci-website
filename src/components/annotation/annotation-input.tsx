@@ -34,43 +34,56 @@ const AutoResizeTextarea: React.FC<AutoResizeTextareaProps> = ({ value, onChange
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="min-h-[120px] w-full resize-none bg-white/0 outline-none"
+      className="w-full resize-none bg-white/0 outline-none"
     />
   )
 }
 
 export default function AnnotationInput({ value, onChange, placeholder, className }: AnnotationInputProps) {
-  const [localValue, setLocalValue] = useState<IAnnotationData>(value)
-  const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    onChange(localValue)
-  }, [localValue, onChange])
+  const [uploading, setUploading] = useState(false)
 
   const handleTextChange = (text: string) => {
-    setLocalValue((prev) => ({ ...prev, content: text }))
+    onChange({
+      ...value,
+      content: text
+    })
   }
 
-  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files || files.length === 0) return
+  const getBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = (error) => reject(error)
+    })
+  }
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
 
     try {
       setUploading(true)
-      const uploadPromises = Array.from(files).map((file) => commonApi.uploadFile(file))
-      const results = await Promise.all(uploadPromises)
-      const uploadedFiles = results.map((result) => ({
-        name: result.data.filename,
-        url: result.data.url
-      }))
+      // Generate base64 preview first
+      const base64Preview = await getBase64(file)
 
-      setLocalValue((prev) => ({
-        ...prev,
-        images: [...prev.images, ...uploadedFiles]
-      }))
+      // Upload file in background
+      const res = await commonApi.uploadFile(file)
+
+      onChange({
+        ...value,
+        images: [
+          ...value.images,
+          {
+            name: file.name,
+            url: res.data.url,
+            preview: base64Preview
+          }
+        ]
+      })
     } catch (error) {
-      console.error('Failed to upload images:', error)
+      console.error('Upload failed:', error)
     } finally {
       setUploading(false)
       if (fileInputRef.current) {
@@ -79,33 +92,52 @@ export default function AnnotationInput({ value, onChange, placeholder, classNam
     }
   }
 
-  const handleRemoveImage = (index: number) => {
-    setLocalValue((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index)
-    }))
+  const handleDeleteImage = (indexToDelete: number) => {
+    onChange({
+      ...value,
+      images: value.images.filter((_, index) => index !== indexToDelete)
+    })
   }
 
   return (
     <div className={className}>
       <div className="relative">
-        <div className="min-h-[300px] w-full resize-none rounded-lg bg-white/0 p-4 pb-16 text-white ring-2 placeholder:text-gray-500 focus-within:ring-primary">
+        <div className="min-h-[300px] w-full resize-none rounded-lg bg-white/5 p-4 pb-16 text-white ring-1 ring-primary/0 placeholder:text-gray-500 focus-within:ring-primary">
           <AutoResizeTextarea
-            value={localValue.content}
+            value={value.content}
             onChange={handleTextChange}
             placeholder={placeholder}
-            maxLength={512}
+            maxLength={500}
           />
 
-          {/* Image Grid */}
-          {localValue.images.length > 0 && (
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              {localValue.images.map((image, index) => (
-                <div key={index} className="group relative aspect-[16/9]">
-                  <img src={image.url} alt="" className="size-full rounded-lg object-cover" />
+          {/* Upload Button */}
+          <div className="absolute bottom-4 right-4">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white transition-all hover:bg-white/20"
+            >
+              <Image size={20} />
+              {uploading ? 'Uploading...' : 'Add Image'}
+            </button>
+          </div>
+
+          {value.images.length > 0 && (
+            <div className="mt-4 flex gap-4">
+              {value.images.map((image, index) => (
+                <div key={image.url} className="group relative size-20 overflow-hidden rounded-lg">
+                  <img src={image.preview || image.url} alt={image.name} className="size-full object-cover" />
                   <button
-                    onClick={() => handleRemoveImage(index)}
-                    className="absolute right-1 top-1 hidden rounded-full bg-black/50 p-1 text-white hover:bg-black group-hover:block"
+                    onClick={() => handleDeleteImage(index)}
+                    className="absolute right-1 top-1 hidden size-6 items-center justify-center rounded-full bg-black/50 text-sm text-white transition-all hover:bg-black/80 group-hover:flex"
                   >
                     ×
                   </button>
@@ -113,26 +145,6 @@ export default function AnnotationInput({ value, onChange, placeholder, classNam
               ))}
             </div>
           )}
-        </div>
-
-        {/* Upload Button */}
-        <div className="absolute bottom-4 right-4">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageUpload}
-            className="hidden"
-          />
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            className="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white transition-all hover:bg-white/20"
-          >
-            <Image size={20} />
-            {uploading ? 'Uploading...' : 'Add Image'}
-          </button>
         </div>
       </div>
     </div>

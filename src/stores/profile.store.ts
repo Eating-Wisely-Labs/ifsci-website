@@ -19,11 +19,12 @@ export function useProfileStore() {
   return snapshot(profileStore)
 }
 
-async function getAnalysisRecords(address: string, page: number) {
+async function getAnalysisRecords(address: string, page: number, annotation_user_id?: string) {
   const res = await postApi.getPostList({
     user_id: address,
     page_no: page,
-    page_size: profileStore.pageSize
+    page_size: profileStore.pageSize,
+    annotation_user_id
   })
   profileStore.records = res.data.list
   profileStore.page = res.data.page_no

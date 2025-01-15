@@ -7,7 +7,6 @@ import { useParams } from 'react-router-dom'
 import Spin from '@/components/ui/spin'
 import { userStoreActions } from '@/stores/user.store'
 import { Pagination } from '@/components/ui/pagination'
-// import { TwitterActions } from '@/components/user-profile/twitter-actions'
 import { AnnotationItem } from '@/components/annotation/annotation-item'
 
 interface AnnotationListProps {
@@ -58,12 +57,6 @@ const RecordsList = () => {
 const AnnotationList: React.FC<AnnotationListProps> = ({ className }) => {
   const params = useParams()
   const { publicKey } = useWallet()
-  //   const { twitter_user_name } = useUserStore()
-
-  //   const isMyProfile = useMemo(() => {
-  //     const address = publicKey?.toString()
-  //     return address === params.address
-  //   }, [publicKey, params.address])
 
   useEffect(() => {
     if (!publicKey) return
@@ -85,7 +78,6 @@ const AnnotationList: React.FC<AnnotationListProps> = ({ className }) => {
           {/* Food Analysis Records Title */}
           <div className="mb-8 flex items-center justify-between">
             <h1 className="text-lg font-bold sm:text-3xl">Annotation Records</h1>
-            {/* <TwitterActions hasBindTwitter={!!twitter_user_name} isMine={isMyProfile} /> */}
           </div>
 
           {/* Records List */}
