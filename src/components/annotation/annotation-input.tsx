@@ -50,14 +50,14 @@ export default function AnnotationInput({ value, onChange, placeholder, classNam
     })
   }
 
-  const getBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result as string)
-      reader.onerror = (error) => reject(error)
-    })
-  }
+  // const getBase64 = (file: File): Promise<string> => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader()
+  //     reader.readAsDataURL(file)
+  //     reader.onload = () => resolve(reader.result as string)
+  //     reader.onerror = (error) => reject(error)
+  //   })
+  // }
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -65,8 +65,6 @@ export default function AnnotationInput({ value, onChange, placeholder, classNam
 
     try {
       setUploading(true)
-      // Generate base64 preview first
-      const base64Preview = await getBase64(file)
 
       // Upload file in background
       const res = await commonApi.uploadFile(file)
@@ -77,8 +75,7 @@ export default function AnnotationInput({ value, onChange, placeholder, classNam
           ...value.images,
           {
             name: file.name,
-            url: res.data.url,
-            preview: base64Preview
+            url: res.data.url
           }
         ]
       })

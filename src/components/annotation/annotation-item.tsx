@@ -24,24 +24,26 @@ export const AnnotationItem = memo(function AnnotationItem({ record, className }
 
       <div className="basis-4/12">
         <h2 className="font-bold text-primary">Annotation: </h2>
-        <div className="flex flex-wrap gap-x-3">
+        <div className="">
           {record?.annotation_data.category && (
             <p className="text-white/45">
-              category: <span className="text-white">{record.annotation_data.category}</span>
+              Category: <span className="text-white">{record.annotation_data.category}</span>
             </p>
           )}
           {record?.annotation_data.brand && (
             <p className="text-white/45">
-              brand: <span className="text-white">{record.annotation_data.brand}</span>
+              Brand: <span className="text-white">{record.annotation_data.brand}</span>
             </p>
           )}
           {record?.annotation_data.region && (
             <p className="text-white/45">
-              region: <span className="text-white">{record.annotation_data.region}</span>
+              Region: <span className="text-white">{record.annotation_data.region}</span>
             </p>
           )}
         </div>
-        <div className="mb-4">{record?.annotation_data.content}</div>
+        <div className="mb-4 text-white/45">
+          Description: <span className="text-white">{record?.annotation_data.content}</span>
+        </div>
         <div className="grid grid-cols-3 gap-2">
           {record?.annotation_data.images.map((file, index) => (
             <img

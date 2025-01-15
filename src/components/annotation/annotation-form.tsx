@@ -120,7 +120,7 @@ export default function AnnotationForm(props: { handleSubmit: (data: IAnnotation
                     <select
                       value={annotationData.region}
                       onChange={(e) => handleInputChange('region', e.target.value)}
-                      className="w-full bg-black/0 focus:outline-none"
+                      className="w-full bg-black/0 text-white focus:outline-none [&>option]:bg-black [&>option]:text-white"
                       required
                     >
                       <option value="">Select a region</option>
