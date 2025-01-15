@@ -157,7 +157,7 @@ Example 2 (Numerical count): Not 3 hotdogs but 4 hotdogs in the picture`}
             <div>
               <h3 className="mb-4 text-lg font-bold">You can't submit data annotation now.</h3>
               <p>1. You have already submitted an annotation for this record, or</p>
-              <p>2. The record has reached its maximum number of annotations (3).</p>
+              <p>2. Annotation limit reached. Please select other images to annotate</p>
             </div>
           )}
         </>

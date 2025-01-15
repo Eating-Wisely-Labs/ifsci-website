@@ -56,10 +56,10 @@ export const AnalysisRecordCard = memo(function AnalysisRecordCard({ record, sho
           <img
             src={formattedRecord.image}
             alt="Food"
-            className="mb-5 aspect-[16/9] size-full rounded-xl bg-white/5 object-cover"
+            className="mb-5 aspect-[16/9] w-full rounded-xl bg-white/5 object-cover"
           />
         ) : (
-          <div className="mb-5 aspect-[16/9] size-full rounded-xl bg-white/20 object-cover"></div>
+          <div className="mb-5 aspect-[16/9] w-full rounded-xl bg-white/20 object-cover"></div>
         )}
         {formattedRecord.score > 0 && showActions && (
           <div className="absolute right-3 top-3 rounded-full bg-primary/80 px-2 py-1 text-xs text-black">

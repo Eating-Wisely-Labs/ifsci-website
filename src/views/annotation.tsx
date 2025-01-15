@@ -29,7 +29,7 @@ export default function Annotation({ className }: AnnotationProps) {
     try {
       const address = publicKey?.toString() || ''
       const result = await postApi.getAnnotationResult({ user_id: address, code: params.id || '' })
-      if (!result.data || result.data.level !== 1) {
+      if (result.data && result.data.level > 1) {
         setSubmitStatus('fail')
         setSubmitResult({ level: 1, reason: 'You have already submitted the annotation.', score: 0 })
         return
