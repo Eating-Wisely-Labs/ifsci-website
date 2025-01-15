@@ -77,8 +77,7 @@ export default function AnnotationInput({ value, onChange, placeholder, classNam
           ...value.images,
           {
             name: file.name,
-            url: res.data.url,
-            preview: base64Preview
+            url: res.data.url
           }
         ]
       })

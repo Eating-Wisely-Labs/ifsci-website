@@ -6,4 +6,7 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+  .dark-scrollbar::-webkit-scrollbar {
+    background-color: black
+  }
 }
