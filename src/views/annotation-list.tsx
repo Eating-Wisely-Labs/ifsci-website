@@ -60,7 +60,7 @@ const AnnotationList: React.FC<AnnotationListProps> = ({ className }) => {
 
   useEffect(() => {
     if (!publicKey) return
-    userStoreActions.getTwitterUserInfo(publicKey.toString())
+    userStoreActions.getUserInfo(publicKey.toString())
   }, [publicKey])
 
   return (

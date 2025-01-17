@@ -12,6 +12,7 @@ interface IFormattedRecord {
   text: string
   datetime: string
   score: number
+  checkin: number
 }
 
 interface AnalysisRecordCardProps {
@@ -30,11 +31,22 @@ export const AnalysisRecordCard = memo(function AnalysisRecordCard({ record, sho
   const navigate = useNavigate()
 
   const formattedRecord: IFormattedRecord = useMemo(() => {
-    const item = { image: '', calories: '', protein: '', carbs: '', fat: '', text: '', datetime: '', score: 0 }
+    const item = {
+      image: '',
+      calories: '',
+      protein: '',
+      carbs: '',
+      fat: '',
+      text: '',
+      datetime: '',
+      score: 0,
+      checkin: 0
+    }
     item.datetime = record ? dayjs(record.create_time * 1000).format('YYYY-MM-DD h:mm A') : ''
     item.text = record?.text ?? ''
     item.image = record?.image ?? ''
     item.score = record?.food_post_score ?? 0
+    item.checkin = record?.checkin?.status ?? 0
 
     record?.food_items.forEach((foodItem) => {
       if (foodItem.name in FOOD_ITEM_MAPPING) {
@@ -92,7 +104,15 @@ export const AnalysisRecordCard = memo(function AnalysisRecordCard({ record, sho
         </div>
       </div>
       {/* Timestamp */}
-      <div className="mt-4 text-sm text-gray-400">{formattedRecord.datetime}</div>
+      <div className="mt-4 flex items-center justify-between text-sm text-gray-400">
+        <span>{formattedRecord.datetime}</span>
+        {formattedRecord.checkin === 1 && (
+          <span className="ml-2 rounded-full bg-primary/10 px-2 py-1 text-primary">👀💪 Check-in</span>
+        )}
+        {formattedRecord.checkin === 2 && (
+          <span className="ml-2 rounded-full bg-[red]/10 px-2 py-1 text-[red]">😥 Check-in</span>
+        )}
+      </div>
       {/* Comment */}
       <p className="mb-4 text-base text-white">{formattedRecord.text}</p>
       {/* Extra */}

@@ -1,24 +1,32 @@
-import twitterApi from '@/apis/twitter.api'
+import accountApi from '@/apis/account.api'
 import { proxy, useSnapshot } from 'valtio'
 
 export interface IUserStore {
   twitter_user_name: string | null
+  score: number
 }
 
 export const userStore = proxy<IUserStore>({
-  twitter_user_name: null
+  twitter_user_name: null,
+  score: 0
 })
 
 export function useUserStore() {
   return useSnapshot(userStore)
 }
 
-async function getTwitterUserInfo(address: string) {
-  const { data } = await twitterApi.getTwitterUserInfo(address)
-  console.log(data)
-  userStore.twitter_user_name = data.twitter_user_name
+async function getUserInfo(address: string) {
+  const { data } = await accountApi.getUserInfo(address)
+  userStore.twitter_user_name = data.twitter_name
+  userStore.score = data.score
+  return data
+}
+
+async function clear() {
+  userStore.twitter_user_name = ''
 }
 
 export const userStoreActions = {
-  getTwitterUserInfo
+  getUserInfo,
+  clear
 }

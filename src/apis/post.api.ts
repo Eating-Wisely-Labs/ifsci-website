@@ -22,6 +22,10 @@ export interface IPostRecord {
   food_items: readonly IFoodItem[]
   annotation_data: IAnnotationData | null
   food_post_score: number
+  checkin: {
+    checkin_time: string
+    status: number
+  }
 }
 
 export interface IPostListResponse {

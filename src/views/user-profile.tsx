@@ -72,7 +72,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ className }) => {
 
   useEffect(() => {
     if (!publicKey) return
-    userStoreActions.getTwitterUserInfo(publicKey.toString())
+    userStoreActions.getUserInfo(publicKey.toString())
   }, [publicKey])
 
   return (

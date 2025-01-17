@@ -69,7 +69,7 @@ export default function AnnotationDialog({ open, onClose, status, result }: Anno
           {status === 'loading' && <span>Processing...</span>}
           {status === 'error' && <span>Something went wrong</span>}
           {status === 'fail' && <span>Failed to earn reward!</span>}
-          {status === 'success' && <span>{result.score} Points Awarded!</span>}
+          {status === 'success' && <span>{result.score} tokens Awarded!</span>}
         </h2>
 
         {/* Description */}

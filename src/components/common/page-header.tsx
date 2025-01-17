@@ -24,7 +24,7 @@ function MobileNavigation() {
   }
 
   async function handleProfileClick() {
-    navigate(`/profile/${publicKey?.toString()}`)
+    navigate(`/home/${publicKey?.toString()}`)
   }
 
   async function handleAnnotationsClick() {
@@ -117,7 +117,7 @@ function MobileNavigation() {
   )
 }
 
-export default function PageHeader() {
+function DesktopNavigation() {
   const { setVisible } = useWalletModal()
   const { publicKey, disconnect } = useWallet()
   const navigate = useNavigate()
@@ -128,13 +128,45 @@ export default function PageHeader() {
   }
 
   async function handleProfileClick() {
-    navigate(`/profile/${publicKey?.toString()}`)
+    navigate(`/home/${publicKey?.toString()}`)
   }
 
   async function handleAnnotationsClick() {
     navigate(`/annotations/${publicKey?.toString()}`)
   }
+  return (
+    <nav className="hidden h-full justify-between gap-8 md:flex">
+      <a href="https://s.ifsci.wtf/static/whitepaper.pdf" target="_blank" className="transition-all hover:text-primary">
+        Whitepaper
+      </a>
+      {publicKey ? (
+        <>
+          <div onClick={handleProfileClick} className="cursor-pointer transition-all hover:text-primary">
+            Profile
+          </div>
+          <Dropdown
+            className="h-full"
+            menu={[
+              { label: 'Annotations', onClick: handleAnnotationsClick },
+              { label: 'Disconnect', onClick: handleDisconnect }
+            ]}
+          >
+            <div className="flex items-center gap-2">
+              <Wallet />
+              {shortenAddress(publicKey?.toString() || '')}
+            </div>
+          </Dropdown>
+        </>
+      ) : (
+        <div onClick={() => setVisible(true)} className="cursor-pointer transition-all hover:text-primary">
+          Connect Wallet
+        </div>
+      )}
+    </nav>
+  )
+}
 
+export default function PageHeader() {
   return (
     <header className="fixed top-0 z-[99] w-full bg-black/20 px-6 py-4 text-white backdrop-blur-lg">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between">
@@ -143,38 +175,7 @@ export default function PageHeader() {
           Intermittent Fasting
         </a>
         <MobileNavigation />
-        <nav className="hidden h-full justify-between gap-8 md:flex">
-          <a
-            href="https://s.ifsci.wtf/static/whitepaper.pdf"
-            target="_blank"
-            className="transition-all hover:text-primary"
-          >
-            Whitepaper
-          </a>
-          {publicKey ? (
-            <>
-              <div onClick={handleProfileClick} className="cursor-pointer transition-all hover:text-primary">
-                Profile
-              </div>
-              <Dropdown
-                className="h-full"
-                menu={[
-                  { label: 'Annotations', onClick: handleAnnotationsClick },
-                  { label: 'Disconnect', onClick: handleDisconnect }
-                ]}
-              >
-                <div className="flex items-center gap-2">
-                  <Wallet />
-                  {shortenAddress(publicKey?.toString() || '')}
-                </div>
-              </Dropdown>
-            </>
-          ) : (
-            <div onClick={() => setVisible(true)} className="cursor-pointer transition-all hover:text-primary">
-              Connect Wallet
-            </div>
-          )}
-        </nav>
+        <DesktopNavigation />
       </div>
       <div></div>
     </header>
