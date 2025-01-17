@@ -107,10 +107,10 @@ export const AnalysisRecordCard = memo(function AnalysisRecordCard({ record, sho
       <div className="mt-4 flex items-center justify-between text-sm text-gray-400">
         <span>{formattedRecord.datetime}</span>
         {formattedRecord.checkin === 1 && (
-          <span className="ml-2 rounded-full bg-primary/10 px-2 py-1 text-primary">😎 Checkin</span>
+          <span className="ml-2 rounded-full bg-primary/10 px-2 py-1 text-primary">👀💪 Check-in</span>
         )}
         {formattedRecord.checkin === 2 && (
-          <span className="ml-2 rounded-full bg-[red]/10 px-2 py-1 text-[red]">😥 Checkin</span>
+          <span className="ml-2 rounded-full bg-[red]/10 px-2 py-1 text-[red]">😥 Check-in</span>
         )}
       </div>
       {/* Comment */}

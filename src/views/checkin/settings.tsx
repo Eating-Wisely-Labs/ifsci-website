@@ -6,6 +6,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { useAuthStore } from '@/stores/auth.store'
 import Spin from '@/components/ui/spin'
 import toast from '@/components/ui/toast'
+import { useNavigate } from 'react-router-dom'
 
 const generateTimeOptions = () => {
   const options: string[] = []
@@ -28,6 +29,7 @@ const FastingPlanSettings: React.FC = () => {
   const { token } = useAuthStore()
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
+  const navigate = useNavigate()
 
   const handleTimeChange = (time: string, isStart: boolean) => {
     if (isStart) {
@@ -71,6 +73,7 @@ const FastingPlanSettings: React.FC = () => {
       .updateUserCheckInSettings(plan)
       .then(() => {
         toast.success('Fasting plan saved successfully')
+        navigate(-1)
       })
       .catch((err) => {
         toast.error(err.message)

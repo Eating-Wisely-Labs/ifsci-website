@@ -54,9 +54,6 @@ const CheckinHome: React.FC = () => {
       endDateTime = endDateTime.add(1, 'day')
     }
 
-    console.log('now', now)
-    console.log('endDateTime', endDateTime.format('YYYY-MM-DD HH:mm:ss'))
-
     if (now.isBefore(startTimeDateTime) || now.isAfter(endDateTime)) {
       setAction('checkin')
       setInTimeRange(false)
