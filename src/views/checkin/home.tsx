@@ -58,7 +58,11 @@ const CheckinHome: React.FC = () => {
     if (now.isBefore(startTimeDateTime) || now.isAfter(endDateTime)) {
       setAction('checkin')
       setInTimeRange(false)
-      setNextEatingTime(startTimeDateTime.add(1, 'day').format('HH:mm MM/DD/YYYY'))
+      if (now.isBefore(startTimeDateTime)) {
+        setNextEatingTime(startTimeDateTime.format('HH:mm MM/DD/YYYY'))
+      } else {
+        setNextEatingTime(startTimeDateTime.add(1, 'day').format('HH:mm MM/DD/YYYY'))
+      }
     } else {
       setInTimeRange(true)
       setTimeLeft(calculateTimeLeft(endDateTime))
