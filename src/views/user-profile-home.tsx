@@ -4,28 +4,25 @@ import { userStoreActions, useUserStore } from '@/stores/user.store'
 import { shortenAddress } from '@/utils/shorten-address'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
-import dayjs from 'dayjs'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const UserProfileHome: React.FC = () => {
   const navigate = useNavigate()
   const { token } = useAuthStore()
-  const { twitter_user_name } = useUserStore()
+  const { twitter_user_name, score } = useUserStore()
   const { publicKey } = useWallet()
   const { setVisible } = useWalletModal()
 
   useEffect(() => {
+    console.log(token, publicKey)
     if (!token || !publicKey) return
-    userStoreActions.getTwitterUserInfo(publicKey?.toString() || '')
+
+    userStoreActions.getUserInfo(publicKey?.toString() || '')
   }, [token, publicKey])
 
   const handleCheckIn = () => {
-    const date = dayjs().format('h:mm A')
-    const shareLink = `https://ifsci.wtf/profile/${publicKey?.toString()}`
-    const shareText = `#Check in @${date}`
-    const url = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareLink)}`
-    window.open(url, '_blank')
+    navigate('/checkin')
   }
 
   return (
@@ -68,16 +65,18 @@ const UserProfileHome: React.FC = () => {
           </div>
 
           <div className="mb-8 flex flex-col sm:flex-row sm:items-center">
-            <label className="mb-2 block shrink-0 text-lg sm:basis-[132px]">Total token</label>
-            <div className="w-full rounded border border-white/10 bg-[#111111] px-3 text-white">
-              <strong className="text-2xl leading-[50px] text-primary">1000 tokens</strong>
+            <label className="mb-2 block shrink-0 text-lg sm:basis-[132px]">Total points</label>
+            <div className="w-full rounded border border-white/10 bg-primary/10 px-3 text-white">
+              <strong className="text-2xl leading-[50px] text-primary">
+                {score > 1 ? `${score} points` : `${score} point`}
+              </strong>
             </div>
           </div>
 
           {/* Cards Grid */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {/* Daily Check in Card */}
-            <div className="rounded-lg bg-[#111111] p-6">
+            <div className="rounded-lg border-b border-primary bg-primary/10 p-6">
               <h2 className="mb-8 text-center text-2xl font-bold">Daily Check in</h2>
               <button
                 disabled={!token}
@@ -89,7 +88,7 @@ const UserProfileHome: React.FC = () => {
             </div>
 
             {/* Food Analysis Records Card */}
-            <div className="rounded-lg bg-[#111111] p-6">
+            <div className="rounded-lg bg-white/10 p-6">
               <h2 className="mb-8 text-center text-2xl font-bold">Food Analysis Records</h2>
               <button
                 disabled={!token}
@@ -101,7 +100,7 @@ const UserProfileHome: React.FC = () => {
             </div>
 
             {/* Food Annotation Records Card */}
-            <div className="rounded-lg bg-[#111111] p-6">
+            <div className="rounded-lg bg-white/10 p-6">
               <h2 className="mb-8 text-center text-2xl font-bold">Food Annotation Records</h2>
               <button
                 disabled={!token}

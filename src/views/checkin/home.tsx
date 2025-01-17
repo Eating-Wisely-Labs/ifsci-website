@@ -4,8 +4,11 @@ import DotBg from '@/assets/checkin-page/dot-bg.png'
 import PageHeader from '@/components/common/page-header'
 import Spin from '@/components/ui/spin'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { useUserStore } from '@/stores/user.store'
+import { userStoreActions, useUserStore } from '@/stores/user.store'
 import accountApi from '@/apis/account.api'
+import { useAuthStore } from '@/stores/auth.store'
+import { useWalletModal } from '@solana/wallet-adapter-react-ui'
+import { useNavigate } from 'react-router-dom'
 
 interface TimeLeft {
   hours: number
@@ -16,10 +19,16 @@ interface TimeLeft {
 const CheckinHome: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ hours: 0, minutes: 0, seconds: 0 })
   const [endOfTime, setEndTime] = useState<string>('')
+  const [startTime, setStartTime] = useState<string>('')
+  const [inTimeRange, setInTimeRange] = useState(false)
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const { publicKey } = useWallet()
   const { twitter_user_name } = useUserStore()
+  const { token } = useAuthStore()
+  const [action, setAction] = useState<'login' | 'bindX' | 'setTime' | 'checkin'>('login')
+  const { setVisible } = useWalletModal()
+  const navigate = useNavigate()
 
   const calculateTimeLeft = (targetTime: Dayjs) => {
     const now = dayjs()
@@ -34,29 +43,85 @@ const CheckinHome: React.FC = () => {
   }
 
   useEffect(() => {
-    const targetTime = dayjs(endOfTime)
-    calculateTimeLeft(targetTime)
-  }, [endOfTime])
+    if (!endOfTime) return
+    const [endHours, endMinutes] = endOfTime.split(':').map(Number)
+    const [startHours] = startTime.split(':').map(Number)
+    const now = dayjs()
 
-  useEffect(() => {
-    setTimeLeft(calculateTimeLeft())
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft())
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [])
+    const startTimeDateTime = dayjs().set('hour', startHours).set('minute', 0).set('second', 0)
+    let endDateTime = dayjs().set('hour', endHours).set('minute', endMinutes).set('second', 0)
+    if (endHours < startHours) {
+      endDateTime = endDateTime.add(1, 'day')
+    }
+
+    console.log('now', now)
+    console.log('endDateTime', endDateTime.format('YYYY-MM-DD HH:mm:ss'))
+
+    if (now.isBefore(startTimeDateTime) || now.isAfter(endDateTime)) {
+      setAction('checkin')
+      setInTimeRange(false)
+    } else {
+      setInTimeRange(true)
+      setTimeLeft(calculateTimeLeft(endDateTime))
+      const timer = setInterval(() => {
+        setTimeLeft(calculateTimeLeft(endDateTime))
+      }, 1000)
+      setAction('checkin')
+      return () => clearInterval(timer)
+    }
+  }, [endOfTime, startTime])
 
   useEffect(() => {
     if (!publicKey || !twitter_user_name) return
+    if (!twitter_user_name) {
+      setAction('bindX')
+      return
+    }
     setLoading(true)
     accountApi
       .getUserCheckInSettings(publicKey.toString())
       .then((res) => {
-        set
+        if (!res.data?.end_time) {
+          setAction('setTime')
+        } else {
+          setEndTime(res.data.end_time)
+          setStartTime(res.data.start_time)
+        }
       })
-      .catch(console.error)
-    setLoading(false)
+      .catch(() => {
+        setAction('checkin')
+      })
+      .finally(() => setLoading(false))
   }, [publicKey, twitter_user_name])
+
+  useEffect(() => {
+    if (!publicKey || !token) {
+      setAction('login')
+      return
+    }
+    setLoading(true)
+    userStoreActions
+      .getUserInfo(publicKey?.toString() || '')
+      .then((res) => {
+        if (!res.twitter_name) {
+          setAction('bindX')
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        setLoading(false)
+      })
+  }, [publicKey, token])
+
+  function handleCheckinClick() {
+    const date = dayjs().format('HH:mm')
+    const shareText = `✅ Daily check-in completed at ${date}
+
+@${import.meta.env.VITE_TWITTER_BOT}
+`
+    const url = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}`
+    window.open(url, '_blank')
+  }
 
   const padNumber = (num: number) => num.toString().padStart(2, '0')
 
@@ -73,36 +138,70 @@ const CheckinHome: React.FC = () => {
             >
               <h2 className="mb-12 text-center text-[36px] font-bold">Fasting Status</h2>
 
-              <div className="mb-20 flex items-center justify-center gap-4">
-                <div className="w-32 rounded-lg bg-white/10 px-6 py-10 text-center">
+              <div className={`mb-20 flex items-center justify-center gap-4`}>
+                <div
+                  className={`${endOfTime && inTimeRange ? 'bg-white text-black' : 'bg-white/10'} w-32 rounded-lg px-6 py-10 text-center transition-all`}
+                >
                   <div className="text-[60px] font-bold">{padNumber(timeLeft.hours)}</div>
-                  <div className="text-white/30">hours</div>
+                  <div className={`${endOfTime && inTimeRange ? 'text-black/30' : 'text-white/30'}`}>hours</div>
                 </div>
 
-                <div className="text-4xl font-bold">:</div>
+                <span className="text-4xl font-bold">:</span>
 
-                <div className="w-32 rounded-lg bg-white/10 px-6 py-10 text-center">
+                <div
+                  className={`${endOfTime && inTimeRange ? 'bg-white text-black' : 'bg-white/10'} w-32 rounded-lg px-6 py-10 text-center transition-all`}
+                >
                   <div className="text-[60px] font-bold">{padNumber(timeLeft.minutes)}</div>
-                  <div className="text-white/30">minutes</div>
+                  <div className={`${endOfTime && inTimeRange ? 'text-black/30' : 'text-white/30'}`}>minutes</div>
                 </div>
 
-                <div className="text-4xl font-bold">:</div>
+                <span className="text-4xl font-bold">:</span>
 
-                <div className="w-32 rounded-lg bg-white/10 px-6 py-10 text-center">
+                <div
+                  className={`${endOfTime && inTimeRange ? 'bg-white text-black' : 'bg-white/10'} w-32 rounded-lg px-6 py-10 text-center transition-all`}
+                >
                   <div className="text-[60px] font-bold">{padNumber(timeLeft.seconds)}</div>
-                  <div className="text-white/30">seconds</div>
+                  <div className={`${endOfTime && inTimeRange ? 'text-black/30' : 'text-white/30'}`}>seconds</div>
                 </div>
               </div>
 
               <div className="flex justify-center">
-                <button
-                  className="rounded-lg bg-second px-8 py-3 font-semibold text-white hover:bg-second/80"
-                  onClick={() => {
-                    /* Handle setting fasting plan */
-                  }}
-                >
-                  Set Fasting Plan
-                </button>
+                {action === 'login' && (
+                  <button
+                    className="rounded-lg bg-second px-8 py-3 font-semibold text-white hover:bg-second/80"
+                    onClick={() => setVisible(true)}
+                  >
+                    Connect Wallet
+                  </button>
+                )}
+
+                {action === 'bindX' && (
+                  <button
+                    className="rounded-lg bg-second px-8 py-3 font-semibold text-white hover:bg-second/80"
+                    onClick={() => navigate('/link/x')}
+                  >
+                    Bind X
+                  </button>
+                )}
+
+                {action === 'setTime' && (
+                  <button
+                    className="rounded-lg bg-second px-8 py-3 font-semibold text-white hover:bg-second/80"
+                    onClick={() => navigate('/checkin/settings')}
+                  >
+                    Set Fasting Plan
+                  </button>
+                )}
+
+                {action === 'checkin' && (
+                  <button
+                    disabled={!inTimeRange}
+                    className="rounded-lg bg-primary px-8 py-3 font-semibold text-black hover:bg-primary/80 disabled:bg-white/10"
+                    onClick={handleCheckinClick}
+                  >
+                    {inTimeRange ? 'Record New Meal' : 'In fasting time'}
+                  </button>
+                )}
               </div>
             </div>
           </Spin>

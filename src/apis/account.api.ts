@@ -37,14 +37,14 @@ class AccountApi {
   }
 
   async getUserCheckInSettings(address: string) {
-    const res = await this.request.post<IResponse<ICheckInSettings>>('/web/checkin/get', {
+    const res = await this.request.post<IResponse<ICheckInSettings>>('/web/checkin/plan/get', {
       user_id: address
     })
     return res.data
   }
 
   async updateUserCheckInSettings(params: ICheckInSettings) {
-    const res = await this.request.post<IResponse<ICheckInSettings>>('/web/checkin/save', params)
+    const res = await this.request.post<IResponse<ICheckInSettings>>('/web/checkin/plan/save', params)
     return res.data
   }
 }

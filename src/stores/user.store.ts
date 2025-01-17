@@ -15,10 +15,11 @@ export function useUserStore() {
   return useSnapshot(userStore)
 }
 
-async function getTwitterUserInfo(address: string) {
+async function getUserInfo(address: string) {
   const { data } = await accountApi.getUserInfo(address)
   userStore.twitter_user_name = data.twitter_name
   userStore.score = data.score
+  return data
 }
 
 async function clear() {
@@ -26,6 +27,6 @@ async function clear() {
 }
 
 export const userStoreActions = {
-  getTwitterUserInfo,
+  getUserInfo,
   clear
 }

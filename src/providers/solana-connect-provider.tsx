@@ -90,6 +90,10 @@ function SolanaWalletConnect() {
     authStoreActions.logout()
   }, [disconnecting])
 
+  useEffect(() => {
+    console.log(new PhantomWalletAdapter())
+  }, [])
+
   return <></>
 }
 
