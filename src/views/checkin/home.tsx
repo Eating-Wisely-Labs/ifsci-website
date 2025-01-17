@@ -21,6 +21,7 @@ const CheckinHome: React.FC = () => {
   const [endOfTime, setEndTime] = useState<string>('')
   const [startTime, setStartTime] = useState<string>('')
   const [inTimeRange, setInTimeRange] = useState(false)
+  const [nextEatingTime, setNextEatingTime] = useState<string>('')
 
   const [loading, setLoading] = useState(true)
   const { publicKey } = useWallet()
@@ -45,10 +46,10 @@ const CheckinHome: React.FC = () => {
   useEffect(() => {
     if (!endOfTime) return
     const [endHours, endMinutes] = endOfTime.split(':').map(Number)
-    const [startHours] = startTime.split(':').map(Number)
+    const [startHours, startMinutes] = startTime.split(':').map(Number)
     const now = dayjs()
 
-    const startTimeDateTime = dayjs().set('hour', startHours).set('minute', 0).set('second', 0)
+    const startTimeDateTime = dayjs().set('hour', startHours).set('minute', startMinutes).set('second', 0)
     let endDateTime = dayjs().set('hour', endHours).set('minute', endMinutes).set('second', 0)
     if (endHours < startHours) {
       endDateTime = endDateTime.add(1, 'day')
@@ -57,6 +58,7 @@ const CheckinHome: React.FC = () => {
     if (now.isBefore(startTimeDateTime) || now.isAfter(endDateTime)) {
       setAction('checkin')
       setInTimeRange(false)
+      setNextEatingTime(startTimeDateTime.add(1, 'day').format('HH:mm MM/DD/YYYY'))
     } else {
       setInTimeRange(true)
       setTimeLeft(calculateTimeLeft(endDateTime))
@@ -127,13 +129,13 @@ const CheckinHome: React.FC = () => {
       <PageHeader></PageHeader>
       <div className="px-6 pt-[100px]">
         <div className={`mx-auto max-w-[1200px] text-white`}>
-          <h1 className="mb-16 text-3xl font-bold">Fasting Daily Check in</h1>
+          <h1 className="mb-16 text-3xl font-bold">Daily Check in</h1>
           <Spin loading={loading}>
             <div
               className="mx-auto rounded-lg bg-white/5 px-8 py-16"
               style={{ backgroundImage: `url(${DotBg})`, backgroundSize: '100% auto', backgroundPosition: 'center' }}
             >
-              <h2 className="mb-12 text-center text-[36px] font-bold">Fasting Status</h2>
+              <h2 className="mb-12 text-center text-[36px] font-bold">Intermittent Fasting Eating Window</h2>
 
               <div className={`mb-20 flex items-center justify-center gap-4`}>
                 <div
@@ -161,6 +163,13 @@ const CheckinHome: React.FC = () => {
                   <div className={`${endOfTime && inTimeRange ? 'text-black/30' : 'text-white/30'}`}>seconds</div>
                 </div>
               </div>
+
+              {!inTimeRange && action === 'checkin' && (
+                <p className="mb-12 text-center">
+                  Based on your Intermittent Fasting selection and time input, your next eating window will be{' '}
+                  {nextEatingTime}
+                </p>
+              )}
 
               <div className="flex justify-center">
                 {action === 'login' && (
