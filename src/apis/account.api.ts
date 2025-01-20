@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios'
-import request, { IResponse } from './request'
+import request, { IPaginationParams, IResponse } from './request'
 
 export type TCheckInType = 'sixteen_and_eight' | 'eight_and_sixteen'
 
@@ -14,6 +14,20 @@ export interface ICheckInSettings {
   checkin_type: TCheckInType
   start_time: string
   end_time: string
+}
+
+export interface IRewardItem {
+  id: number
+  reward_type_name: string
+  score: number
+  create_time: number
+}
+
+export interface IRewardListResponse {
+  count: number
+  page_no: number
+  page_size: number
+  list: IRewardItem[]
 }
 
 class AccountApi {
@@ -45,6 +59,11 @@ class AccountApi {
 
   async updateUserCheckInSettings(params: ICheckInSettings) {
     const res = await this.request.post<IResponse<ICheckInSettings>>('/web/checkin/plan/save', params)
+    return res.data
+  }
+
+  async getRewardList(params: IPaginationParams & { user_id: string }) {
+    const res = await this.request.post<IResponse<IRewardListResponse>>('/web/account/reward/page', params)
     return res.data
   }
 }

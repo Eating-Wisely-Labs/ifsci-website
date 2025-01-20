@@ -18,7 +18,7 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '^/api': {
-        target: 'https://ifsci.wtf/',
+        target: 'https://test.ifsci.wtf/',
         changeOrigin: true
       }
     }

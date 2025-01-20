@@ -36,7 +36,7 @@ const UserProfileHome: React.FC = () => {
           {/* Wallet Address Section */}
           <div className="mb-20 flex gap-6">
             <div className="flex flex-1 flex-col gap-8">
-              <div className="flex flex-col sm:flex-row sm:items-center">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <label className="mb-2 block shrink-0 text-lg sm:basis-[132px]">Wallet address</label>
                 {publicKey && token ? (
                   <div className="w-full rounded border border-white/10 bg-[#111111] px-3 leading-[50px] text-white">
@@ -50,7 +50,7 @@ const UserProfileHome: React.FC = () => {
               </div>
 
               {/* Twitter Account Section */}
-              <div className="flex flex-col sm:flex-row sm:items-center">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <label className="mb-2 block shrink-0 text-lg sm:basis-[132px]">X account</label>
                 {token && twitter_user_name ? (
                   <div className="w-full rounded border border-white/10 bg-[#111111] px-3 leading-[50px] text-white">
@@ -67,13 +67,19 @@ const UserProfileHome: React.FC = () => {
                 )}
               </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-center">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <label className="mb-2 block shrink-0 text-lg sm:basis-[132px]">Total points</label>
                 <div className="w-full rounded border border-white/10 bg-primary/10 px-3 text-white">
                   <strong className="text-2xl leading-[50px] text-primary">
                     {score > 1 ? `${score} points` : `${score} point`}
                   </strong>
                 </div>
+                <button
+                  onClick={() => navigate('/reward/history')}
+                  className="rounded bg-primary px-4 py-3 font-semibold text-black hover:bg-primary/80 disabled:opacity-40"
+                >
+                  History
+                </button>
               </div>
             </div>
             <div className="shrink-0">
