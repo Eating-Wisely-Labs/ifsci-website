@@ -4,11 +4,13 @@ import { proxy, useSnapshot } from 'valtio'
 export interface IUserStore {
   twitter_user_name: string | null
   score: number
+  sol_token: number
 }
 
 export const userStore = proxy<IUserStore>({
   twitter_user_name: null,
-  score: 0
+  score: 0,
+  sol_token: 0
 })
 
 export function useUserStore() {
@@ -17,8 +19,8 @@ export function useUserStore() {
 
 async function getUserInfo(address: string) {
   const { data } = await accountApi.getUserInfo(address)
-  userStore.twitter_user_name = data.twitter_name
-  userStore.score = data.score
+  userStore.twitter_user_name = data?.twitter_name
+  userStore.score = data?.score
   return data
 }
 
