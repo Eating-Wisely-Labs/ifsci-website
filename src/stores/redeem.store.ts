@@ -1,14 +1,14 @@
-import accountApi, { IRewardItem } from '@/apis/account.api'
+import accountApi, { IRedeemedItem } from '@/apis/account.api'
 import { proxy, snapshot } from 'valtio'
 
-export interface IredeemStore {
-  records: readonly IRewardItem[]
+export interface IRedeemStore {
+  records: readonly IRedeemedItem[]
   page: number | null
   total: number
   pageSize: number
 }
 
-export const redeemStore = proxy<IredeemStore>({
+export const redeemStore = proxy<IRedeemStore>({
   records: [],
   page: null,
   total: 0,
