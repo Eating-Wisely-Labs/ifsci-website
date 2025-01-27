@@ -31,6 +31,12 @@ module.exports = {
         900: '#111827',
         950: '#030712'
       }
+    },
+    extend: {
+      boxShadow: {
+        primary:
+          '0px 298px 84px 0px #00000000, 0px 12px 26px 0px #0000000A, 0px 48px 48px 0px #00000008, 0px 107px 64px 0px #00000005, 0px 191px 76px 0px #00000003'
+      }
     }
   },
   plugins: [aspectRatioPlugin]

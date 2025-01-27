@@ -11,6 +11,7 @@ import dayjs from 'dayjs'
 import toast from '@/components/ui/toast'
 import { IAccountScoreItem } from '@/apis/account.api'
 import { cn } from '@udecode/cn'
+import ClaimModal from '@/components/user-profile-home/claim-modal'
 
 // anchor-browser
 import { Connection, PublicKey } from '@solana/web3.js'
@@ -33,6 +34,7 @@ const UserProfileHome: React.FC = () => {
   const { setVisible } = useWalletModal()
   const wallet = useAnchorWallet()
   const [loading, setLoading] = useState(false)
+  const [isClaimed, setIsClaimed] = useState(false)
   console.log(wallet)
 
   useEffect(() => {
@@ -47,18 +49,6 @@ const UserProfileHome: React.FC = () => {
     navigate('/checkin')
   }
 
-  async function exchangeScore(item) {
-    const res = await userStoreActions.exchangeScore({
-      exchange_id: item.exchange_id,
-      user_id: publicKey?.toString() ?? '',
-      hash: '',
-      score: item.score ?? 0,
-      token: item.score ?? 0,
-      claim_status: 2
-    })
-    console.log(res)
-  }
-
   async function claimSol(item: IAccountScoreItem) {
     if (publicKey?.toString() === '') {
       toast.info('Please connect wallet')
@@ -68,7 +58,7 @@ const UserProfileHome: React.FC = () => {
     setLoading(true)
     try {
       // browser anchor
-      // TODO need to change 找markof要线上的
+      // TODO need to change 从env里取
       const mint = new PublicKey('83qFTfjQAftEDkWxLPUuPvPcxatCkUGAVNcoHDa48paW')
       // const user = web3.Keypair.generate()
       // TODO need to change
@@ -91,6 +81,8 @@ const UserProfileHome: React.FC = () => {
         })
         .rpc()
       console.log(tx_hash)
+      const confirmRes = await connection.confirmTransaction(tx_hash, 'finalized')
+      console.log(confirmRes)
       await connection.confirmTransaction(tx_hash)
       // TODO 轮询 查看claimState.claimed
       const [userPDA] = PublicKey.findProgramAddressSync(
@@ -110,6 +102,9 @@ const UserProfileHome: React.FC = () => {
         claim_status: 2
       })
       console.log(res)
+      if (res?.claim_status === 3) {
+        setIsClaimed(true)
+      }
       userStoreActions.getAccountScore(publicKey?.toString() || '', 1)
     } catch (error) {
       console.error(error)
@@ -129,6 +124,7 @@ const UserProfileHome: React.FC = () => {
   return (
     <div className="text-white">
       <PageHeader></PageHeader>
+      <ClaimModal isOpen={isClaimed} onClose={() => setIsClaimed(false)} />
       <div className="px-6">
         <div className="mx-auto max-w-[1200px] pt-[120px] text-white">
           <h1 className="mb-12 text-4xl font-bold">User Profile Home</h1>

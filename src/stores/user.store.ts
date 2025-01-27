@@ -50,6 +50,7 @@ async function getAccountScore(address: string, page: number) {
 async function exchangeScore(item: IExchangeScoreParam) {
   const { data } = await accountApi.exchangeScore(item)
   console.log(data)
+  return data
 }
 
 export const userStoreActions = {
