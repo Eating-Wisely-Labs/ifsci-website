@@ -26,12 +26,11 @@ export interface IRewardItem {
 
 export interface IRedeemedItem {
   id: number
-  create_time: number
   status: number
   hash: string
   redeemed_points: number
   earned_tokens: number
-  finish_time: null | number
+  finish_time: number | null
 }
 
 export interface IRewardListResponse {

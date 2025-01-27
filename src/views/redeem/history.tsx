@@ -66,7 +66,7 @@ const RewardHistory: React.FC = () => {
                   <div className="divide-y divide-white/10">
                     {records.map((record, index) => (
                       <div key={index} className="grid grid-cols-[1fr_1fr_auto] items-center px-6 py-4">
-                        <div>{getFormattedDate(record.finish_time)}</div>
+                        <div>{record.finish_time ? getFormattedDate(record.finish_time) : ''}</div>
                         <div>{record.redeemed_points}</div>
                         <div>
                           <span className="rounded-full bg-primary px-3 py-1 text-sm text-black">
