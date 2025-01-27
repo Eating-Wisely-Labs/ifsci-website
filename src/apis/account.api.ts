@@ -7,7 +7,7 @@ export interface IUserInfo {
   user_id: string
   twitter_name: string
   score: number
-  token: string
+  token: number
 }
 
 export interface ICheckInSettings {

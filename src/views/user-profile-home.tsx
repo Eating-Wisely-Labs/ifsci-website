@@ -13,7 +13,6 @@ import { IAccountScoreItem } from '@/apis/account.api'
 import { cn } from '@udecode/cn'
 import ClaimModal from '@/components/user-profile-home/claim-modal'
 
-// anchor-browser
 import { Connection, PublicKey } from '@solana/web3.js'
 import { utils, AnchorProvider, Program } from '@coral-xyz/anchor'
 import { IDL, Airdrop } from '@/target/idl'
@@ -57,12 +56,8 @@ const UserProfileHome: React.FC = () => {
     if (item.claim_status === 3) return
     setLoading(true)
     try {
-      // browser anchor
-      // TODO need to change 从env里取
-      const mint = new PublicKey('83qFTfjQAftEDkWxLPUuPvPcxatCkUGAVNcoHDa48paW')
-      // const user = web3.Keypair.generate()
-      // TODO need to change
-      const rpcURL = 'https://api.devnet.solana.com'
+      const mint = new PublicKey(import.meta.env.VITE_SOLANT_MINT)
+      const rpcURL = import.meta.env.VITE_SOLANA_RPC_URL
       const connection = new Connection(rpcURL)
 
       if (!wallet) return
@@ -84,15 +79,14 @@ const UserProfileHome: React.FC = () => {
       const confirmRes = await connection.confirmTransaction(tx_hash, 'finalized')
       console.log(confirmRes)
       await connection.confirmTransaction(tx_hash)
-      // TODO 轮询 查看claimState.claimed
       const [userPDA] = PublicKey.findProgramAddressSync(
         [utils.bytes.utf8.encode('claim-states'), publicKey!.toBuffer()],
         program.programId
       )
-      let claimState = await program.account.claimState.fetch(userPDA)
+      const claimState = await program.account.claimState.fetch(userPDA)
       console.log(claimState.claimed)
       if (!claimState.claimed) return
-      await sleep(3000)
+      await sleep(2000)
       const res = await userStoreActions.exchangeScore({
         exchange_id: item.exchange_id,
         user_id: publicKey?.toString() ?? '',
