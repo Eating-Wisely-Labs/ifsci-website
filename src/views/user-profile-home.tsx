@@ -49,7 +49,7 @@ const UserProfileHome: React.FC = () => {
   }
 
   async function claimSol(item: IAccountScoreItem) {
-    if (publicKey?.toString() === '') {
+    if (!publicKey || publicKey?.toString() === '') {
       toast.info('Please connect wallet')
       return
     }
