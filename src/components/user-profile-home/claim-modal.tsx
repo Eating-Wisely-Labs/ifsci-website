@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import modalBackgroundSvg from './modal-background.svg'
 import claimedPng from './claimed.png'
 import { X } from 'lucide-react'
