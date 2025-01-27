@@ -1,0 +1,10 @@
+/Users/yanmin/ChainTool/airdrop/target/debug/deps/libspl_token_metadata_interface-424372977f40cf3a.dylib: /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/lib.rs /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/error.rs /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/instruction.rs /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/state.rs
+
+/Users/yanmin/ChainTool/airdrop/target/debug/deps/libspl_token_metadata_interface-424372977f40cf3a.rlib: /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/lib.rs /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/error.rs /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/instruction.rs /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/state.rs
+
+/Users/yanmin/ChainTool/airdrop/target/debug/deps/spl_token_metadata_interface-424372977f40cf3a.d: /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/lib.rs /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/error.rs /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/instruction.rs /Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/state.rs
+
+/Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/lib.rs:
+/Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/error.rs:
+/Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/instruction.rs:
+/Users/yanmin/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/spl-token-metadata-interface-0.3.5/src/state.rs:

@@ -10,6 +10,7 @@ const Annotation = lazy(() => import('@/views/annotation'))
 const AnnotationList = lazy(() => import('@/views/annotation-list'))
 const CheckinHome = lazy(() => import('@/views/checkin/home'))
 const RewardHistory = lazy(() => import('@/views/reward/history'))
+const RedeemHistory = lazy(() => import('@/views/redeem/history'))
 
 export default function Router() {
   return (
@@ -21,6 +22,7 @@ export default function Router() {
         <Route path="/home/:address" element={<UserProfileHome />} />
         <Route path="/profile/:address" element={<UserProfile />} />
         <Route path="/reward/history" element={<RewardHistory />} />
+        <Route path="/redeem/history" element={<RedeemHistory />} />
         <Route path="/checkin/settings" element={<CheckinSettings />} />
         <Route path="/annotations/:address" element={<AnnotationList />} />
         <Route path="/s/:id" element={<Annotation />} />
