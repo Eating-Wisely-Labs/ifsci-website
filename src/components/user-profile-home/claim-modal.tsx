@@ -14,7 +14,7 @@ export default function Component({ isOpen, points, onClose }: ComponentProps) {
 
   function shareOnX() {
     const shareText = `I just claimed @${points} IFSCI in the Surprise Airdrop on Intermittent Fasting Science! 🎉 Hurry and click @ifsci_ai on Twitter to learn more and seize this amazing opportunity!`
-    const url = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent('https://test.ifsci.wtf/static/share/twitter-share-landing.html')}`
+    const url = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent('https://ifsci.wtf/static/share/twitter-share-landing.html')}`
     window.open(url, '_blank')
   }
 
