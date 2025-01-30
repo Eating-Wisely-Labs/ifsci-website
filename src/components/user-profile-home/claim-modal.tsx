@@ -5,13 +5,18 @@ import twitterXLine from './twitter-x-line.svg'
 
 interface ComponentProps {
   isOpen: boolean
+  points: number
   onClose: () => void
 }
 
-export default function Component({ isOpen, onClose }: ComponentProps) {
+export default function Component({ isOpen, points, onClose }: ComponentProps) {
   if (!isOpen) return null
 
-  function shareOnX() {}
+  function shareOnX() {
+    const shareText = `I just claimed @${points} IFSCI in the Surprise Airdrop on Intermittent Fasting Science! 🎉 Hurry and click @ifsci_ai on Twitter to learn more and seize this amazing opportunity!`
+    const url = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent('https://test.ifsci.wtf/static/share/twitter-share-landing.html')}`
+    window.open(url, '_blank')
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -33,7 +38,7 @@ export default function Component({ isOpen, onClose }: ComponentProps) {
             Miss it? New Airdrop <br />
             Season is now underway!
           </p> */}
-          <div className="mt-4">X $IFSCI Claimed!</div>
+          <div className="mt-4">{points} $IFSCI Claimed!</div>
           <p>Please login your wallet to check it.</p>
           <button
             className="mx-auto mt-6 flex h-[42px] w-[152px] items-center justify-center rounded bg-white text-sm leading-[22p] text-[#1C1C26]"

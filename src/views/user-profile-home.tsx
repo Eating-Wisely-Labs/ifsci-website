@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import MuscleMeowImage from '@/assets/user-profile/muscle-meow.webp'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import toast from '@/components/ui/toast'
 import { IAccountScoreItem } from '@/apis/account.api'
 import { cn } from '@udecode/cn'
@@ -19,11 +20,13 @@ import { IDL, Airdrop } from '@/target/idl'
 import * as spl from '@solana/spl-token'
 import Spin from '@/components/ui/spin'
 
-function sleep(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time)
-  })
-}
+dayjs.extend(utc)
+
+// function sleep(time: number) {
+//   return new Promise((resolve) => {
+//     setTimeout(resolve, time)
+//   })
+// }
 
 const UserProfileHome: React.FC = () => {
   const navigate = useNavigate()
@@ -34,6 +37,7 @@ const UserProfileHome: React.FC = () => {
   const wallet = useAnchorWallet()
   const [loading, setLoading] = useState(false)
   const [isClaimed, setIsClaimed] = useState(false)
+  const [points, setPoints] = useState(0)
   console.log(wallet)
 
   useEffect(() => {
@@ -53,7 +57,7 @@ const UserProfileHome: React.FC = () => {
       toast.info('Please connect wallet')
       return
     }
-    if (item.claim_status === 3) return
+    if ([2, 3].includes(item.claim_status)) return
     setLoading(true)
     try {
       const mint = new PublicKey(import.meta.env.VITE_SOLANT_MINT)
@@ -86,7 +90,7 @@ const UserProfileHome: React.FC = () => {
       const claimState = await program.account.claimState.fetch(userPDA)
       console.log(claimState.claimed)
       if (!claimState.claimed) return
-      await sleep(2000)
+      // await sleep(2000)
       const res = await userStoreActions.exchangeScore({
         exchange_id: item.exchange_id,
         user_id: publicKey?.toString() ?? '',
@@ -98,7 +102,9 @@ const UserProfileHome: React.FC = () => {
       console.log(res)
       if (res?.claim_status === 3) {
         setIsClaimed(true)
+        setPoints(item.score ?? 0)
       }
+      userStoreActions.getUserInfo(publicKey?.toString() || '')
       userStoreActions.getAccountScore(publicKey?.toString() || '', 1)
     } catch (error) {
       console.error(error)
@@ -108,17 +114,17 @@ const UserProfileHome: React.FC = () => {
     }
   }
   const getFormattedDate = (timestamp: number) => {
-    return dayjs(timestamp * 1000).format('YYYY-MM-DD h:mm A')
+    return dayjs.utc(timestamp * 1000).format()
   }
 
   const getCustomTime = () => {
-    return dayjs(new Date('2025/01/05').getTime()).format('YYYY-MM-DD h:mm A')
+    return dayjs.utc(new Date('2025/01/05').getTime()).format()
   }
 
   return (
     <div className="text-white">
       <PageHeader></PageHeader>
-      <ClaimModal isOpen={isClaimed} onClose={() => setIsClaimed(false)} />
+      <ClaimModal isOpen={isClaimed} points={points} onClose={() => setIsClaimed(false)} />
       <div className="px-6">
         <div className="mx-auto max-w-[1200px] pt-[120px] text-white">
           <h1 className="mb-12 text-4xl font-bold">User Profile Home</h1>
@@ -222,7 +228,7 @@ const UserProfileHome: React.FC = () => {
                           <div
                             className={cn(
                               'mx-3 cursor-pointer text-base text-[#A4EF30]',
-                              item.claim_status === 3 && 'opacity-40'
+                              [2, 3].includes(item.claim_status) ? 'opacity-40' : ''
                             )}
                             onClick={() => claimSol(item)}
                           >
