@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/airdrop.json`.
  */
 export type Airdrop = {
-  address: 'B3cvX45FTfSTEuDq15THZsK9JutjcseBhYCGyd8tPGRT'
+  address: 'DBhPrc1EMzmWZD2aR9WBFzx3Rusa5fgpFbdHRC5kVeJe'
   metadata: {
     name: 'airdrop'
     version: '0.1.0'
@@ -386,7 +386,7 @@ export type Airdrop = {
 }
 
 export const IDL = {
-  address: 'B3cvX45FTfSTEuDq15THZsK9JutjcseBhYCGyd8tPGRT',
+  address: 'DBhPrc1EMzmWZD2aR9WBFzx3Rusa5fgpFbdHRC5kVeJe',
   metadata: {
     name: 'airdrop',
     version: '0.1.0',
