@@ -23,7 +23,6 @@ import Spin from '@/components/ui/spin'
 const NOT_START = true
 
 dayjs.extend(utc)
-
 // function sleep(time: number) {
 //   return new Promise((resolve) => {
 //     setTimeout(resolve, time)
@@ -117,11 +116,10 @@ const UserProfileHome: React.FC = () => {
     }
   }
   const getFormattedDate = (timestamp: number) => {
-    return dayjs.utc(timestamp * 1000).format()
-  }
-
-  const getCustomTime = () => {
-    return dayjs.utc(new Date('2025/01/05').getTime()).format()
+    const utcTime = dayjs.utc(timestamp * 1000).format()
+    const time1 = utcTime.split('T')
+    const time2 = time1[0].split('-')
+    return [time2[1], time2[2], time2[0]].join('/') + ' UTC ' + time1[1].slice(0, time1[1].length - 1)
   }
 
   return (
@@ -223,7 +221,7 @@ const UserProfileHome: React.FC = () => {
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">
-                          {getCustomTime()} - {getFormattedDate(item.end_time)}
+                          01/05/2025 UTC 00:00:00 - {getFormattedDate(item.end_time)}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">{+item.score} Points</td>
                         <td className="whitespace-nowrap px-6 py-4">{getFormattedDate(item.release_time)}</td>

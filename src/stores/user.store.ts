@@ -27,7 +27,7 @@ export function useUserStore() {
 async function getUserInfo(address: string) {
   const { data } = await accountApi.getUserInfo(address)
   userStore.twitter_user_name = data?.twitter_name
-  userStore.score = data?.score || 0
+  userStore.score = data?.score ?? 0
   userStore.sol_token = data?.token ?? 0
   return data
 }
