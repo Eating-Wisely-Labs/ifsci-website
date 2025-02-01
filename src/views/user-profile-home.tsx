@@ -20,8 +20,6 @@ import { IDL, Airdrop } from '@/target/idl'
 import * as spl from '@solana/spl-token'
 import Spin from '@/components/ui/spin'
 
-const NOT_START = true
-
 dayjs.extend(utc)
 // function sleep(time: number) {
 //   return new Promise((resolve) => {
@@ -54,7 +52,6 @@ const UserProfileHome: React.FC = () => {
   }
 
   async function claimSol(item: IAccountScoreItem) {
-    if (NOT_START) return
     if (!publicKey || publicKey?.toString() === '') {
       toast.info('Please connect wallet')
       return
@@ -229,7 +226,7 @@ const UserProfileHome: React.FC = () => {
                           <div
                             className={cn(
                               'mx-3 cursor-pointer text-base text-[#A4EF30]',
-                              [2, 3].includes(item.claim_status) || true ? 'opacity-40' : ''
+                              [2, 3].includes(item.claim_status) ? 'opacity-40' : ''
                             )}
                             onClick={() => claimSol(item)}
                           >
