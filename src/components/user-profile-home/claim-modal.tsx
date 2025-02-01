@@ -1,6 +1,6 @@
 // import modalBackgroundSvg from './modal-background.svg'
 import modalBackgroundPng from './claim-modal-bg.png'
-import claimedPng from './claimed.png'
+// import claimedPng from './claimed.png'
 import { X } from 'lucide-react'
 import twitterXLine from './twitter-x-line.svg'
 
