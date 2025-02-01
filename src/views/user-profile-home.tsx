@@ -240,7 +240,7 @@ const UserProfileHome: React.FC = () => {
                     <td className="flex items-center gap-2 whitespace-nowrap px-6 py-4">
                       <span>First Season</span>
                       <div className="rounded-[100px] bg-[#A4EF3014] px-3 py-1 text-sm leading-[22px] text-[#A4EF30]">
-                        Comming Soon
+                        Coming Soon
                       </div>
                     </td>
                   </tr>
