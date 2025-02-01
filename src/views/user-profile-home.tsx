@@ -203,7 +203,7 @@ const UserProfileHome: React.FC = () => {
               <table className="w-full table-auto">
                 <thead>
                   <tr className="border-b border-white/10 text-left">
-                    <th className="whitespace-nowrap px-6 py-4 text-sm font-medium">Session</th>
+                    <th className="whitespace-nowrap px-6 py-4 text-sm font-medium">Season</th>
                     <th className="whitespace-nowrap px-6 py-4 text-sm font-medium">Start Date - End Date</th>
                     <th className="whitespace-nowrap px-6 py-4 text-sm font-medium">Points</th>
                     <th className="whitespace-nowrap px-6 py-4 text-sm font-medium">Release</th>
