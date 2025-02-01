@@ -99,7 +99,7 @@ const UserProfileHome: React.FC = () => {
         claim_status: 2
       })
       console.log(res)
-      if (res?.claim_status === 3) {
+      if ([2, 3].includes(res?.claim_status)) {
         setIsClaimed(true)
         setPoints(item.score ?? 0)
       }
