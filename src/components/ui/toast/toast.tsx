@@ -51,7 +51,7 @@ export const Toast: React.FC<ToastProps> = ({ message, type, duration = 3000, on
   return createPortal(
     <div
       className={`fixed left-1/2 z-[1000000] flex max-w-[80%] -translate-x-1/2 items-center rounded-full border px-4 py-3 text-white shadow-lg transition-all duration-300 ease-in-out ${config.bgColor} ${config.borderColor} ${
-        show ? 'top-4 translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        show ? 'top-4 translate-y-0 opacity-100' : '-top-20 -translate-y-0 opacity-0'
       }`}
     >
       <Icon className={`size-5 ${config.iconColor} mr-2`} />

@@ -40,42 +40,11 @@ import {
   WalletConnectWalletAdapterConfig
 } from '@solana/wallet-adapter-wallets'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
-import { MessageSignerWalletAdapterProps } from '@solana/wallet-adapter-base'
 import { useEffect, useMemo } from 'react'
-import { encode } from 'bs58'
-import accountApi from '@/apis/account.api'
 import '@solana/wallet-adapter-react-ui/styles.css'
-import { authStoreActions } from '@/stores/auth.store'
 
-async function login(address: string, signMessage?: MessageSignerWalletAdapterProps['signMessage']) {
-  if (!signMessage) return
-  if (!address) return
-
-  const messageRes = await accountApi.getSignMessage(address)
-  const message = messageRes.data.message
-  const signatureBuffer = await signMessage(Buffer.from(message, 'utf-8'))
-  const signature = encode(signatureBuffer)
-  const { data } = await accountApi.login({ address, signature, message })
-  return data.token
-}
-
-function SolanaWalletConnect() {
-  const { wallet, publicKey, signMessage, disconnect, disconnecting } = useWallet()
-
-  useEffect(() => {
-    if (!publicKey) return
-
-    const token = localStorage.getItem('token')
-    if (token) return
-
-    login(publicKey.toString(), signMessage)
-      .then((token) => authStoreActions.login(token || ''))
-      .catch((e) => {
-        console.log(e)
-        disconnect()
-        authStoreActions.logout()
-      })
-  }, [publicKey, signMessage, disconnect])
+function WalletConnector() {
+  const { wallet } = useWallet()
 
   useEffect(() => {
     if (!wallet) return
@@ -84,16 +53,6 @@ function SolanaWalletConnect() {
     if (wallet.readyState === WalletReadyState.NotDetected) window.open(wallet.adapter.url, '_blank')
     if (wallet.readyState === WalletReadyState.Unsupported) window.open(wallet.adapter.url, '_blank')
   }, [wallet])
-
-  useEffect(() => {
-    if (!disconnecting) return
-    authStoreActions.logout()
-  }, [disconnecting])
-
-  useEffect(() => {
-    console.log(new PhantomWalletAdapter())
-  }, [])
-
   return <></>
 }
 
@@ -154,7 +113,7 @@ export default function SolanaConnectProvider({ children }: { children: React.Re
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets}>
         <WalletModalProvider>
-          <SolanaWalletConnect></SolanaWalletConnect>
+          <WalletConnector />
           {children}
         </WalletModalProvider>
       </WalletProvider>
