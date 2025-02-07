@@ -1,6 +1,6 @@
 import accountApi from '@/apis/account.api'
 import { authStoreActions } from '@/stores/auth.store'
-import { MessageSignerWalletAdapterProps, WalletReadyState } from '@solana/wallet-adapter-base'
+import { MessageSignerWalletAdapterProps } from '@solana/wallet-adapter-base'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { encode } from 'bs58'
 import { useEffect } from 'react'
